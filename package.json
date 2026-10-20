@@ -1,0 +1,11 @@
+{
+  "name": "attendtrack",
+  "version": "1.0.0",
+  "description": "Smart Student Attendance & 75% Compliance Engine",
+  "scripts": {
+    "server": "npm --prefix server start",
+    "client": "npm --prefix client run dev",
+    "dev": "npm --prefix client run dev",
+    "start": "npm --prefix client start"
+  }
+}

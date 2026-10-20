@@ -1,0 +1,26 @@
+/* =========================================================
+   Settings (Semester Parameters & Automation) Page Styles
+   ========================================================= */
+
+.settings-card {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-dates-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 600px) {
+  .settings-dates-grid {
+    grid-template-columns: 1fr;
+  }
+}

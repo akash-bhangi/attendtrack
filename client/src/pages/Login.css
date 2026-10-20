@@ -1,0 +1,40 @@
+/* =========================================================
+   Login (Auth Portal) Page Styles
+   ========================================================= */
+
+.login-canvas {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--bg-page);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 36px 30px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+
+.login-divider-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0;
+}
+
+.login-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.login-divider-text {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}

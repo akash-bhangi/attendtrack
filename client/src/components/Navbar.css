@@ -1,0 +1,21 @@
+/* =========================================================
+   Navbar (Mobile Header) Component Styles
+   ========================================================= */
+
+.mobile-header {
+  display: none;
+  padding: 12px 16px;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+@media (max-width: 900px) {
+  .mobile-header {
+    display: flex;
+  }
+}

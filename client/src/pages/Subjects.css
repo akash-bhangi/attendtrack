@@ -1,0 +1,165 @@
+/* =========================================================
+   Subjects (Course Registry & 75% Audit) Page Styles
+   ========================================================= */
+
+.courses-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.courses-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.courses-desktop-table {
+  display: block;
+}
+
+.courses-mobile-cards {
+  display: none;
+}
+
+/* Modal Live Compliance Preview Box */
+.modal-live-preview {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  margin: 4px 0;
+  transition: all 0.2s ease;
+}
+
+.modal-live-preview.is-safe {
+  background: var(--safe-bg);
+  border-color: var(--safe-border);
+}
+
+.modal-live-preview.is-danger {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+}
+
+.modal-live-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.modal-live-preview-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.modal-live-preview-pct {
+  font-size: 20px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.modal-live-preview-desc {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Subjects Mobile Responsive System */
+@media (max-width: 768px) {
+  .courses-card-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    padding-bottom: 16px !important;
+    margin-bottom: 20px !important;
+  }
+
+  .courses-header-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1.3fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .courses-header-actions button {
+    width: 100% !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    padding: 9px 10px !important;
+    white-space: nowrap !important;
+  }
+
+  .courses-desktop-table {
+    display: none !important;
+  }
+
+  .courses-mobile-cards {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    margin-top: 8px !important;
+  }
+
+  .course-register-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    position: relative;
+    border-left: 5px solid var(--border-darker);
+    margin-bottom: 2px;
+  }
+
+  .course-register-card.is-safe {
+    border-left-color: var(--safe-text);
+  }
+
+  .course-register-card.is-deficit {
+    border-left-color: var(--danger-text);
+  }
+
+  .course-register-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .course-register-stats-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: var(--bg-subtle);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .course-register-actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .course-register-actions-row button {
+    font-size: 12px !important;
+    padding: 6px 14px !important;
+    border-radius: var(--radius-sm) !important;
+  }
+}

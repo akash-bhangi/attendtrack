@@ -1,0 +1,135 @@
+/* =========================================================
+   History (Calendar & Ledger) Page Styles
+   ========================================================= */
+
+.calendar-container {
+  padding: 18px;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.calendar-cell {
+  min-height: 88px;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.15s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.calendar-badge-desktop {
+  display: block;
+}
+
+.calendar-dots-mobile {
+  display: none;
+}
+
+.history-desktop-table {
+  display: block;
+}
+
+.history-mobile-cards {
+  display: none;
+}
+
+/* History Responsive Media Queries */
+@media (max-width: 768px) {
+  .calendar-container {
+    padding: 12px 8px;
+  }
+
+  .calendar-grid {
+    gap: 3px;
+  }
+
+  .calendar-cell {
+    min-height: 48px;
+    height: 48px;
+    padding: 4px 2px;
+    border-radius: 4px;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .calendar-cell-top {
+    width: 100%;
+    display: flex;
+    justify-content: center !important;
+  }
+
+  .calendar-cell-count-text {
+    display: none !important;
+  }
+
+  /* Hide overflowing text labels on tiny phone screens */
+  .calendar-badge-desktop {
+    display: none !important;
+  }
+
+  /* Show neat indicator dots on phones */
+  .calendar-dots-mobile {
+    display: flex !important;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    margin-top: 2px;
+  }
+
+  .calendar-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .calendar-weekday-header {
+    font-size: 10.5px !important;
+    padding: 2px 0;
+  }
+
+  .history-desktop-table {
+    display: none !important;
+  }
+
+  .history-mobile-cards {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 12px 10px !important;
+  }
+
+  .history-log-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid var(--border-darker);
+  }
+
+  .history-log-card.status-present {
+    border-left-color: var(--safe-text);
+  }
+
+  .history-log-card.status-absent {
+    border-left-color: var(--danger-text);
+  }
+
+  .history-log-card.status-cancelled {
+    border-left-color: var(--cancelled-text);
+  }
+}

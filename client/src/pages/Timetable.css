@@ -1,0 +1,254 @@
+/* =========================================================
+   Timetable (Schedule Matrix) Page Styles
+   ========================================================= */
+
+.timetable-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.timetable-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.timetable-header-actions button {
+  border: 1.5px solid var(--border-darker);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.timetable-header-actions button.btn-primary {
+  border-color: var(--primary);
+}
+
+.timetable-day-strip {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.timetable-day-chip {
+  flex: 1;
+  min-width: 65px;
+  text-align: center;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.timetable-day-chip:hover {
+  border-color: var(--border-darker);
+  background: var(--bg-card-hover);
+}
+
+.timetable-day-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.timetable-day-chip.active .day-name {
+  color: var(--primary-text);
+}
+
+.timetable-day-chip.active .slot-count {
+  color: var(--primary-text);
+  opacity: 0.85;
+}
+
+.timetable-day-chip.is-today {
+  border: 2px solid var(--accent);
+  position: relative;
+}
+
+.timetable-day-chip.is-today:not(.active) {
+  background: var(--accent-subtle);
+}
+
+.timetable-day-chip.is-today:not(.active) .day-name {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+.timetable-day-chip .today-dot {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: var(--accent);
+  color: #ffffff;
+  margin: 0 auto 3px auto;
+  text-transform: uppercase;
+  width: fit-content;
+  display: block;
+}
+
+.timetable-day-chip.active .today-dot {
+  background: var(--primary-text);
+  color: var(--primary);
+}
+
+.timetable-day-chip .day-name {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.timetable-day-chip .slot-count {
+  display: block;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-top: 2px;
+}
+
+.timetable-desktop-table {
+  display: block;
+}
+
+.timetable-mobile-cards {
+  display: none;
+}
+
+/* Timetable Mobile Responsive Styles */
+@media (max-width: 768px) {
+  .timetable-card-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  .timetable-header-actions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1.2fr !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin-top: 4px !important;
+  }
+
+  .timetable-header-actions button {
+    width: 100% !important;
+    font-size: 11.5px !important;
+    padding: 8px 6px !important;
+    border-radius: var(--radius-sm) !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    border: 1.5px solid var(--border-darker) !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+  }
+
+  .timetable-header-actions button.btn-primary {
+    border-color: var(--primary) !important;
+  }
+
+  .timetable-day-strip {
+    display: flex !important;
+    gap: 4px !important;
+    overflow-x: auto !important;
+    padding-bottom: 4px !important;
+    margin-bottom: 16px !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .timetable-day-strip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .timetable-day-chip {
+    flex: 1 1 0 !important;
+    min-width: 48px !important;
+    padding: 7px 3px !important;
+    text-align: center !important;
+    border-radius: var(--radius-sm) !important;
+    background: var(--bg-subtle) !important;
+    border: 1px solid var(--border) !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+  }
+
+  .timetable-day-chip.active {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+  }
+
+  .timetable-day-chip.active .day-name {
+    color: var(--primary-text) !important;
+  }
+
+  .timetable-day-chip.active .slot-count {
+    color: var(--primary-text) !important;
+    opacity: 0.9 !important;
+  }
+
+  .timetable-day-chip.is-today:not(.active) {
+    border: 2px solid var(--accent) !important;
+    background: var(--accent-subtle) !important;
+  }
+
+  .timetable-day-chip.is-today:not(.active) .day-name {
+    color: var(--accent) !important;
+    font-weight: 800 !important;
+  }
+
+  .timetable-day-chip .today-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    margin: 0 auto 3px auto;
+  }
+
+  .timetable-day-chip.active .today-dot {
+    background: var(--primary-text);
+  }
+
+  .timetable-day-chip .day-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-main);
+    display: block;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .timetable-day-chip .slot-count {
+    font-size: 10px;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .timetable-desktop-table {
+    display: none !important;
+  }
+
+  .timetable-mobile-cards {
+    display: flex !important;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .timetable-mobile-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: var(--shadow-sm);
+  }
+}
