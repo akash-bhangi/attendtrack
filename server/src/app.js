@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const upload = require('./middleware/upload');
 const { protect } = require('./middleware/authMiddleware');
 
@@ -57,7 +58,26 @@ app.get('/api/analytics/summary', protect, analyticsController.getAnalyticsSumma
 app.post('/api/analytics/ai-insights', protect, analyticsController.getAIInsights);
 app.post('/api/analytics/send-test-email', protect, analyticsController.triggerTestEmail);
 
-// 404 Handler
+// ================= PRODUCTION STATIC SERVING =================
+// Serve the built React client in production
+const clientDistPath = path.join(__dirname, '..', '..', 'client', 'dist');
+app.use(express.static(clientDistPath));
+
+// SPA catch-all: serve index.html for any non-API GET route (client-side routing)
+app.use((req, res, next) => {
+  // Skip non-GET requests, API routes, and health checks
+  if (req.method !== 'GET' || req.path.startsWith('/api') || req.path.startsWith('/health')) {
+    return next();
+  }
+  res.sendFile(path.join(clientDistPath, 'index.html'), (err) => {
+    if (err) {
+      // If dist doesn't exist (dev mode), fall through to 404
+      next();
+    }
+  });
+});
+
+// 404 Handler (API routes that don't match)
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Endpoint not found' });
 });

@@ -43,8 +43,14 @@
 /* Split Dashboard Grid */
 .dashboard-split {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: minmax(0, 1fr) 340px;
   gap: 24px;
+  align-items: start;
+}
+
+.dashboard-split > div:last-child {
+  position: sticky;
+  top: 24px;
 }
 
 /* Date Navigation Toolbar */
@@ -156,6 +162,72 @@
 }
 
 /* =========================================================
+   Scheduled Sessions Header & Backfill Banner
+   ========================================================= */
+.schedule-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.schedule-header-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.schedule-header-date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.schedule-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.schedule-header-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.schedule-classes-badge {
+  white-space: nowrap;
+}
+
+.past-backfill-banner {
+  background: var(--accent-subtle, #eff6ff);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.past-backfill-text {
+  font-size: 12px;
+  color: var(--text-main);
+  flex: 1;
+  min-width: 180px;
+}
+
+.past-backfill-btn {
+  padding: 4px 10px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+/* =========================================================
    Daily Attendance Course Card
    ========================================================= */
 .course-item {
@@ -170,6 +242,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .course-item:hover {
@@ -196,11 +272,15 @@
   align-items: center;
   gap: 18px;
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .course-info {
   flex: 1;
   min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .course-meta-tags {
@@ -550,10 +630,135 @@
 @media (max-width: 900px) {
   .dashboard-split {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
 @media (max-width: 768px) {
+  .schedule-card-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .schedule-header-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .schedule-header-btn {
+    flex: 1 1 auto;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .card-panel {
+    padding: 14px 12px;
+  }
+
+  .course-item {
+    padding: 14px 12px;
+    border-left-width: 4px;
+    gap: 10px;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .course-main-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .course-info {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .course-title {
+    font-size: 15px;
+  }
+
+  .course-stat-col {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: stretch;
+    text-align: left;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+
+  .course-stat-top-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .course-stat-col .mini-progress-track {
+    width: 100% !important;
+    height: 5px;
+    margin-top: 2px;
+  }
+
+  .action-button-group {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    box-sizing: border-box;
+  }
+
+  .course-pct-row {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+  }
+
+  .course-pct {
+    font-size: 16.5px;
+    font-weight: 800;
+  }
+
+  .course-held {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .course-compliance-badge .badge-pill {
+    font-size: 10.5px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+
+  .btn-mark {
+    padding: 9px 4px;
+    font-size: 11.5px;
+    font-weight: 700;
+    white-space: nowrap;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  .btn-mark span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   .date-nav-toolbar {
     flex-direction: column;
     align-items: stretch;
@@ -610,91 +815,6 @@
     font-size: 13px;
   }
 
-  .course-item {
-    padding: 14px;
-    border-left-width: 4px;
-  }
-
-  .course-main-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .course-info {
-    width: 100%;
-  }
-
-  .course-title {
-    font-size: 15px;
-  }
-
-  .course-stat-col {
-    background: var(--bg-subtle);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    align-items: stretch;
-    text-align: left;
-    box-sizing: border-box;
-    min-width: 0;
-  }
-
-  .course-stat-top-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-
-  .course-pct-row {
-    display: flex;
-    align-items: baseline;
-    gap: 5px;
-  }
-
-  .course-pct {
-    font-size: 17px;
-    font-weight: 800;
-  }
-
-  .course-held {
-    font-size: 11px;
-    color: var(--text-muted);
-  }
-
-  .course-compliance-badge .badge-pill {
-    font-size: 11px;
-    padding: 3px 8px;
-  }
-
-  .course-stat-col .mini-progress-track {
-    width: 100% !important;
-    height: 5px;
-    margin-top: 2px;
-  }
-
-  .action-button-group {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-  }
-
-  .btn-mark {
-    width: 100%;
-    padding: 9px 4px;
-    font-size: 12px;
-    font-weight: 700;
-    white-space: nowrap;
-    justify-content: center;
-  }
-
   .kpi-grid {
     grid-template-columns: 1fr 1fr;
     gap: 8px;
@@ -722,6 +842,7 @@
   .slot-note-input-row {
     flex-direction: column;
     align-items: stretch;
+    gap: 8px;
   }
 
   .slot-note-actions {
@@ -729,14 +850,45 @@
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
+  .card-panel {
+    padding: 12px 10px;
+  }
+
   .course-item {
     padding: 12px 10px;
     gap: 10px;
+    border-left-width: 3.5px;
   }
 
   .course-title {
-    font-size: 14px;
+    font-size: 14.5px;
+  }
+
+  .course-meta-tags {
+    gap: 4px;
+  }
+
+  .course-time-tag,
+  .course-room-tag,
+  .course-code-tag {
+    font-size: 10.5px;
+    padding: 1px 5px;
+  }
+
+  .course-details-row {
+    font-size: 11px;
+    gap: 4px;
+  }
+
+  .course-faculty {
+    font-size: 11px;
+  }
+
+  .course-note-badge {
+    max-width: 100%;
+    font-size: 10.5px;
+    padding: 2px 6px;
   }
 
   .course-stat-col {
@@ -744,7 +896,260 @@
     gap: 5px;
   }
 
+  .course-stat-top-row {
+    gap: 4px;
+  }
+
   .course-pct {
-    font-size: 16px;
+    font-size: 15.5px;
+  }
+
+  .course-held {
+    font-size: 10.5px;
+  }
+
+  .course-compliance-badge .badge-pill {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+
+  .action-button-group {
+    gap: 4px;
+  }
+
+  .btn-mark {
+    padding: 8px 2px;
+    font-size: 11px;
+    gap: 2px;
+  }
+
+  .btn-mark span:first-child {
+    font-size: 11px !important;
+  }
+
+  .schedule-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .schedule-header-btn {
+    width: 100%;
+  }
+
+  .schedule-classes-badge {
+    text-align: center;
+    align-self: stretch;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .past-backfill-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .past-backfill-btn {
+    width: 100%;
+    text-align: center;
   }
 }
+
+@media (max-width: 360px) {
+  .course-item {
+    padding: 10px 8px;
+    gap: 8px;
+  }
+
+  .course-title {
+    font-size: 13.5px;
+  }
+
+  .course-stat-col {
+    padding: 6px 8px;
+  }
+
+  .btn-mark {
+    padding: 7px 1px;
+    font-size: 10px;
+    gap: 1px;
+  }
+}
+
+/* =========================================================
+   Mid-Semester Quick Catch-Up Modal Responsive Architecture
+   ========================================================= */
+.midsem-modal-card {
+  max-width: 640px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.midsem-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 6px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.midsem-title {
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text-main);
+  letter-spacing: -0.2px;
+}
+
+.midsem-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+.midsem-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.midsem-close-btn:hover {
+  background: var(--bg-subtle);
+  color: var(--text-main);
+}
+
+.midsem-desktop-table {
+  display: block;
+  max-height: 340px;
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 16px;
+}
+
+.midsem-input-inline {
+  width: 90px;
+  padding: 6px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-main);
+}
+
+.midsem-mobile-cards {
+  display: none;
+}
+
+.midsem-card-item {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.midsem-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.midsem-card-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.midsem-card-code {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.midsem-card-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.midsem-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.midsem-input-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.midsem-input-field {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  box-sizing: border-box;
+}
+
+.midsem-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .midsem-desktop-table {
+    display: none !important;
+  }
+
+  .midsem-mobile-cards {
+    display: flex !important;
+    flex-direction: column;
+    max-height: 52vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-right: 2px;
+    margin-bottom: 14px;
+  }
+
+  .midsem-actions {
+    flex-direction: column-reverse !important;
+    gap: 8px !important;
+  }
+
+  .midsem-actions button {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 11px 16px !important;
+    font-size: 13px !important;
+  }
+}
+

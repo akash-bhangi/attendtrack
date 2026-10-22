@@ -445,7 +445,7 @@ export default function Timetable() {
                 )}
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div className="timetable-modal-grid">
                 <div>
                   <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                     Day of the Week
@@ -476,7 +476,7 @@ export default function Timetable() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div className="timetable-modal-grid">
                 <div>
                   <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                     Start Time ({formatTime12h(slotForm.startTime)})
@@ -503,7 +503,7 @@ export default function Timetable() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '16px' }}>
+              <div className="modal-actions">
                 <button type="button" className="btn-secondary" onClick={() => setShowSlotModal(false)}>
                   Cancel
                 </button>
@@ -556,7 +556,7 @@ export default function Timetable() {
                   </label>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+                <div className="modal-actions">
                   <button type="button" className="btn-secondary" onClick={() => setShowScanModal(false)}>
                     Close
                   </button>
@@ -594,7 +594,7 @@ export default function Timetable() {
                   Saving this timetable will automatically delete all old schedule slots, obsolete courses, and previous attendance records across all database collections so no stale data remains in storage.
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '16px' }}>
+                <div className="modal-actions">
                   <button
                     type="button"
                     className="btn-secondary"

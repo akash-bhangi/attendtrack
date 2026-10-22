@@ -98,6 +98,12 @@
     white-space: nowrap !important;
   }
 
+  @media (max-width: 480px) {
+    .courses-header-actions {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
   .courses-desktop-table {
     display: none !important;
   }
@@ -161,5 +167,19 @@
     font-size: 12px !important;
     padding: 6px 14px !important;
     border-radius: var(--radius-sm) !important;
+  }
+}
+
+/* Modal Responsive Form Grid */
+.subject-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 520px) {
+  .subject-modal-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
   }
 }

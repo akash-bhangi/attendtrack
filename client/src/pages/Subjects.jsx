@@ -396,7 +396,7 @@ export default function Subjects() {
                     />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="subject-modal-grid">
                     <div>
                       <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                         Course Code
@@ -441,7 +441,7 @@ export default function Subjects() {
                     />
                   </div>
 
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div className="subject-modal-grid">
                     <div>
                       <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                         Sessions Conducted
@@ -505,16 +505,7 @@ export default function Subjects() {
                     </div>
                   </div>
 
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'flex-end',
-                      gap: '10px',
-                      marginTop: '10px',
-                      paddingTop: '14px',
-                      borderTop: '1px solid var(--border)'
-                    }}
-                  >
+                  <div className="modal-actions">
                     <button
                       type="button"
                       className="btn-secondary"

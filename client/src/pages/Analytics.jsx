@@ -376,6 +376,13 @@ export default function Analytics() {
     });
   };
 
+  const handleCopyAIStrategy = () => {
+    if (aiInsights?.aiAnalysis) {
+      navigator.clipboard.writeText(aiInsights.aiAnalysis);
+      notify.success('AI strategic roadmap copied to clipboard!', 'Strategy Copied');
+    }
+  };
+
   // Export PDF with jsPDF & AutoTable
   const exportPDF = () => {
     if (!summary || !summary.subjectBreakdown) return;
@@ -516,7 +523,7 @@ export default function Analytics() {
             Generate high-resolution reports for department submission, professor verification, or personal tracking.
           </p>
 
-          <div style={{ display: 'flex', gap: '10px', marginTop: '18px' }}>
+          <div className="analytics-export-actions">
             <button className="btn-primary" onClick={exportPDF} style={{ padding: '10px 18px' }}>
               📄 Download PDF Report
             </button>
@@ -605,8 +612,8 @@ export default function Analytics() {
 
       {/* AI Strategic Attendance Intelligence Panel */}
       <div className="card-panel" style={{ marginTop: '24px' }}>
-        <div className="card-panel-header">
-          <div>
+        <div className="ai-card-header">
+          <div className="ai-header-title-box">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               <h2 className="card-panel-title">🤖 AI Attendance Analysis & Strategy</h2>
               <span className="badge-pill badge-neutral" style={{ fontSize: '10px' }}>
@@ -628,14 +635,15 @@ export default function Analytics() {
               Real-time deep analysis: deficit recovery roadmaps, safe bunk forecasts & exam eligibility
             </span>
           </div>
-          <button
-            className="btn-primary"
-            onClick={generateAIInsights}
-            disabled={loadingAI}
-            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-          >
-            {loadingAI ? 'Analyzing...' : '✨ Refresh AI Analysis'}
-          </button>
+          <div className="ai-header-actions">
+            <button
+              className="btn-primary ai-refresh-btn"
+              onClick={generateAIInsights}
+              disabled={loadingAI}
+            >
+              {loadingAI ? 'Analyzing...' : '✨ Refresh AI Analysis'}
+            </button>
+          </div>
         </div>
 
 
@@ -688,14 +696,7 @@ export default function Analytics() {
                   </div>
                 </div>
 
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                    gap: '10px',
-                    margin: '16px 0'
-                  }}
-                >
+                <div className="analytics-ai-metrics-grid" style={{ margin: '16px 0' }}>
                   <div style={{ background: 'var(--bg-surface)', padding: '12px 14px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)' }}>
                     <div style={{ fontWeight: 700, fontSize: '12px', color: 'var(--warning-text)', marginBottom: '3px' }}>
                       Status: 429 Resource Exhausted
@@ -715,18 +716,16 @@ export default function Analytics() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '16px', alignItems: 'center' }}>
+                <div className="analytics-strategy-actions">
                   <button
                     className="btn-primary"
                     onClick={generateOfflineInsights}
-                    style={{ padding: '9px 18px', fontSize: '13px' }}
                   >
                     ⚡ View Instant Offline Strategy
                   </button>
                   <button
                     className="btn-secondary"
                     onClick={generateAIInsights}
-                    style={{ padding: '9px 16px', fontSize: '13px' }}
                   >
                     🔄 Retry with Backup Models
                   </button>
@@ -785,20 +784,18 @@ export default function Analytics() {
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '10px', marginTop: '16px' }}>
+                <div className="analytics-strategy-actions">
                   <button
                     className="btn-primary"
                     onClick={generateOfflineInsights}
-                    style={{ padding: '8px 16px', fontSize: '12px' }}
                   >
                     ⚡ View Instant Offline Strategy
                   </button>
                   <button
                     className="btn-secondary"
                     onClick={generateAIInsights}
-                    style={{ padding: '8px 16px', fontSize: '12px' }}
                   >
-                    Retry AI Analysis
+                    🔄 Retry AI Analysis
                   </button>
                 </div>
               </div>
@@ -819,15 +816,33 @@ export default function Analytics() {
               {renderMarkdown(aiInsights.aiAnalysis)}
             </div>
 
-            {aiInsights.generatedAt && (
-              <div style={{ marginTop: '10px', fontSize: '11px', color: 'var(--text-dim)', textAlign: 'right' }}>
+            <div className="ai-bottom-actions">
+              <span style={{ fontSize: '11px', color: 'var(--text-dim)' }}>
                 Generated: {new Date(aiInsights.generatedAt).toLocaleTimeString()} • Engine: {aiInsights.modelUsed ? `Google ${aiInsights.modelUsed}` : 'Google Gemini AI'}
+              </span>
+              <div className="ai-bottom-btns">
+                <button
+                  type="button"
+                  className="btn-secondary"
+                  onClick={handleCopyAIStrategy}
+                  title="Copy full strategy to clipboard"
+                >
+                  📋 Copy Strategy
+                </button>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={generateAIInsights}
+                  disabled={loadingAI}
+                >
+                  {loadingAI ? 'Analyzing...' : '🔄 Re-run Analysis'}
+                </button>
               </div>
-            )}
+            </div>
           </div>
         ) : (
           <div style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)' }}>
-            <button className="btn-primary" onClick={generateAIInsights}>
+            <button className="btn-primary ai-init-btn" onClick={generateAIInsights}>
               ✨ Generate AI Strategic Guidance
             </button>
           </div>

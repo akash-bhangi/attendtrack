@@ -1,9 +1,11 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
+import { usePwaInstall } from '../utils/usePwaInstall';
 import './Sidebar.css';
 
 export default function Sidebar({ currentTab, onTabChange }) {
   const { user, logout, theme, toggleTheme } = useAuth();
+  const { isInstallable, triggerInstall } = usePwaInstall();
 
   const getInitials = (name) => {
     if (!name) return 'ST';
@@ -97,57 +99,81 @@ export default function Sidebar({ currentTab, onTabChange }) {
         </li>
       </ul>
 
+      {isInstallable && (
+        <div style={{ padding: '0 12px 10px 12px' }}>
+          <button
+            onClick={triggerInstall}
+            className="btn-secondary"
+            style={{
+              width: '100%',
+              fontSize: '12px',
+              padding: '8px 10px',
+              justifyContent: 'center',
+              background: 'var(--bg-subtle)',
+              border: '1px dashed var(--border-darker)'
+            }}
+          >
+            <span>📲</span>
+            <span>Install App</span>
+          </button>
+        </div>
+      )}
+
       <div className="sidebar-footer">
         <div className="user-profile-card">
-          <div className="user-profile-main">
-            <div className="user-avatar-wrap">
-              <div className="user-avatar">
-                {user?.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt={user.name}
-                    style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
-                  />
-                ) : (
-                  getInitials(user?.name)
-                )}
+          <div className="user-profile-top">
+            <div className="user-profile-main">
+              <div className="user-avatar-wrap">
+                <div className="user-avatar">
+                  {user?.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    getInitials(user?.name)
+                  )}
+                </div>
+                <span className="user-status-dot" title="Active Session"></span>
               </div>
-              <span className="user-status-dot" title="Active Session"></span>
+              <div className="user-info">
+                <div className="user-name" title={user?.name || 'Student'}>
+                  {user?.name || 'Student'}
+                </div>
+              </div>
             </div>
-            <div className="user-info">
-              <div className="user-name" title={user?.name || 'Student'}>
-                {user?.name || 'Student'}
-              </div>
-              <div className="user-email" title={user?.email || ''}>
-                {user?.email || ''}
-              </div>
+
+            <div className="user-actions">
+              <button
+                onClick={toggleTheme}
+                className="sidebar-icon-btn"
+                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? '☀️' : '🌙'}
+              </button>
+              <button
+                onClick={logout}
+                className="sidebar-icon-btn logout-btn"
+                title="Sign Out"
+                aria-label="Sign Out"
+              >
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                  />
+                </svg>
+              </button>
             </div>
           </div>
 
-          <div className="user-actions">
-            <button
-              onClick={toggleTheme}
-              className="sidebar-icon-btn"
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              aria-label="Toggle Theme"
-            >
-              {theme === 'dark' ? '☀️' : '🌙'}
-            </button>
-            <button
-              onClick={logout}
-              className="sidebar-icon-btn logout-btn"
-              title="Sign Out"
-              aria-label="Sign Out"
-            >
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
-            </button>
+          <div className="user-email-row" title={user?.email || ''}>
+            <span className="user-email-icon">✉</span>
+            <span className="user-email-text">{user?.email || ''}</span>
           </div>
         </div>
       </div>

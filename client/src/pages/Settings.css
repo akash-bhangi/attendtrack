@@ -19,8 +19,42 @@
   gap: 14px;
 }
 
+.settings-nested-box {
+  padding-left: 27px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settings-schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.settings-test-btn {
+  font-size: 12px;
+  padding: 6px 14px;
+}
+
 @media (max-width: 600px) {
   .settings-dates-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .settings-nested-box {
+    padding-left: 0;
+  }
+
+  .settings-schedule-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .settings-test-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 14px;
   }
 }

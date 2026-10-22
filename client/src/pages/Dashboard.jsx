@@ -332,18 +332,17 @@ export default function Dashboard({ onNavigate }) {
         {/* Left Column: Daily Schedule */}
         <div>
           <div className="card-panel">
-            <div className="card-panel-header">
-              <div>
+            <div className="card-panel-header schedule-card-header">
+              <div className="schedule-header-title-group">
                 <h2 className="card-panel-title">Scheduled Sessions</h2>
-                <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
+                <span className="schedule-header-date">
                   {selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })}
                 </span>
               </div>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className="schedule-header-actions">
                 {onNavigate && (
                   <button
-                    className="btn-secondary"
-                    style={{ padding: '6px 12px', fontSize: '12px' }}
+                    className="btn-secondary schedule-header-btn"
                     onClick={() => onNavigate('history')}
                     title="Open Full Semester Attendance Calendar and Logs"
                   >
@@ -351,14 +350,13 @@ export default function Dashboard({ onNavigate }) {
                   </button>
                 )}
                 <button
-                  className="btn-primary"
-                  style={{ padding: '6px 12px', fontSize: '12px' }}
+                  className="btn-primary schedule-header-btn"
                   onClick={openMidSemModal}
                   title="Directly enter total attended and conducted classes so far"
                 >
                   ⚡ Mid-Sem Catch-Up
                 </button>
-                <span className="badge-pill badge-safe">
+                <span className="badge-pill badge-safe schedule-classes-badge">
                   {todayData.slots.length} Classes
                 </span>
               </div>
@@ -402,13 +400,12 @@ export default function Dashboard({ onNavigate }) {
 
             {/* Backfill banner if viewing past date */}
             {isPastDate() && (
-              <div style={{ background: 'var(--accent-subtle, #eff6ff)', border: '1px solid var(--accent)', borderRadius: 'var(--radius-sm)', padding: '8px 12px', marginBottom: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-main)' }}>
+              <div className="past-backfill-banner">
+                <span className="past-backfill-text">
                   🕒 <strong>Past Attendance Backfill:</strong> Viewing classes for <strong>{selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}</strong>. Mark Present/Absent below to record past days.
                 </span>
                 <button
-                  className="btn-secondary"
-                  style={{ padding: '3px 8px', fontSize: '11px' }}
+                  className="btn-secondary past-backfill-btn"
                   onClick={handleToday}
                 >
                   Go to Today
@@ -739,17 +736,28 @@ export default function Dashboard({ onNavigate }) {
 
       {/* Mid-Semester Quick Catch-Up Modal */}
       {showMidSemModal && (
-        <div className="modal-backdrop">
-          <div className="modal-card" style={{ maxWidth: '640px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 800, marginBottom: '6px' }}>
-              ⚡ Mid-Semester Quick Catch-Up
-            </h3>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '16px' }}>
-              Joined AttendTrack midway through the semester? Instead of manually clicking past dates, enter the total classes held and attended for each course so far to calibrate your 75% calculations instantly.
-            </p>
+        <div className="modal-backdrop" onClick={() => setShowMidSemModal(false)}>
+          <div className="modal-card midsem-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="midsem-header">
+              <div>
+                <h3 className="midsem-title">⚡ Mid-Semester Quick Catch-Up</h3>
+                <p className="midsem-desc">
+                  Joined AttendTrack midway through the semester? Enter total classes held and attended so far to calibrate your 75% calculations instantly.
+                </p>
+              </div>
+              <button
+                type="button"
+                className="midsem-close-btn"
+                onClick={() => setShowMidSemModal(false)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
 
             <form onSubmit={handleSaveMidSem}>
-              <div style={{ maxHeight: '320px', overflowY: 'auto', marginBottom: '16px' }}>
+              {/* Desktop / Tablet Table View */}
+              <div className="midsem-desktop-table">
                 <table className="data-table" style={{ fontSize: '12px' }}>
                   <thead>
                     <tr>
@@ -762,7 +770,7 @@ export default function Dashboard({ onNavigate }) {
                   <tbody>
                     {midSemData.length === 0 ? (
                       <tr>
-                        <td colSpan="4" style={{ textAlign: 'center', padding: '20px', color: 'var(--text-muted)' }}>
+                        <td colSpan="4" style={{ textAlign: 'center', padding: '24px', color: 'var(--text-muted)' }}>
                           No subjects registered yet. Add courses in the Subjects or Timetable tab first.
                         </td>
                       </tr>
@@ -777,7 +785,7 @@ export default function Dashboard({ onNavigate }) {
                           <tr key={item.subjectId || idx}>
                             <td>
                               <strong>{item.name}</strong>
-                              {item.code && <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{item.code}</div>}
+                              {item.code && <div style={{ fontSize: '10.5px', color: 'var(--text-muted)' }}>{item.code}</div>}
                             </td>
                             <td>
                               <input
@@ -790,7 +798,7 @@ export default function Dashboard({ onNavigate }) {
                                     prev.map((p, i) => (i === idx ? { ...p, totalConducted: val } : p))
                                   );
                                 }}
-                                style={{ width: '100px', padding: '4px 8px' }}
+                                className="midsem-input-inline"
                               />
                             </td>
                             <td>
@@ -804,10 +812,10 @@ export default function Dashboard({ onNavigate }) {
                                     prev.map((p, i) => (i === idx ? { ...p, totalAttended: val } : p))
                                   );
                                 }}
-                                style={{ width: '100px', padding: '4px 8px' }}
+                                className="midsem-input-inline"
                               />
                             </td>
-                            <td style={{ textAlign: 'right', fontWeight: 700, color: isSafe ? 'var(--safe-text)' : 'var(--danger-text)' }}>
+                            <td style={{ textAlign: 'right', fontWeight: 800, color: isSafe ? 'var(--safe-text)' : 'var(--danger-text)' }}>
                               {pct}%
                             </td>
                           </tr>
@@ -818,7 +826,71 @@ export default function Dashboard({ onNavigate }) {
                 </table>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+              {/* Mobile Touch-Optimized Cards View (<= 640px) */}
+              <div className="midsem-mobile-cards">
+                {midSemData.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '24px', color: 'var(--text-muted)', fontSize: '13px' }}>
+                    No subjects registered yet. Add courses in the Courses tab first.
+                  </div>
+                ) : (
+                  midSemData.map((item, idx) => {
+                    const T = Number(item.totalConducted) || 0;
+                    const A = Number(item.totalAttended) || 0;
+                    const pct = T > 0 ? ((A / T) * 100).toFixed(1) : '100.0';
+                    const isSafe = Number(pct) >= (user?.targetPercentage || 75);
+
+                    return (
+                      <div key={item.subjectId || idx} className="midsem-card-item">
+                        <div className="midsem-card-header">
+                          <div>
+                            <div className="midsem-card-title">{item.name}</div>
+                            {item.code && <div className="midsem-card-code">{item.code}</div>}
+                          </div>
+                          <span className={`badge-pill ${isSafe ? 'badge-safe' : 'badge-danger'}`} style={{ fontWeight: 800 }}>
+                            {pct}%
+                          </span>
+                        </div>
+                        <div className="midsem-card-inputs">
+                          <div className="midsem-input-group">
+                            <label className="midsem-input-label">Held So Far</label>
+                            <input
+                              type="number"
+                              min="0"
+                              value={item.totalConducted}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setMidSemData((prev) =>
+                                  prev.map((p, i) => (i === idx ? { ...p, totalConducted: val } : p))
+                                );
+                              }}
+                              className="midsem-input-field"
+                              placeholder="0"
+                            />
+                          </div>
+                          <div className="midsem-input-group">
+                            <label className="midsem-input-label">Attended</label>
+                            <input
+                              type="number"
+                              min="0"
+                              value={item.totalAttended}
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                setMidSemData((prev) =>
+                                  prev.map((p, i) => (i === idx ? { ...p, totalAttended: val } : p))
+                                );
+                              }}
+                              className="midsem-input-field"
+                              placeholder="0"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+
+              <div className="midsem-actions">
                 <button
                   type="button"
                   className="btn-secondary"

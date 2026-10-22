@@ -252,3 +252,17 @@
     box-shadow: var(--shadow-sm);
   }
 }
+
+/* Modal Responsive Grid */
+.timetable-modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 520px) {
+  .timetable-modal-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+}

@@ -7,16 +7,162 @@
   gap: 12px;
   flex-wrap: wrap;
   align-items: center;
+  margin-top: 18px;
 }
 
+.analytics-strategy-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 16px;
+  width: 100%;
+}
+
+.analytics-ai-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+/* AI Analysis Header & Action Buttons */
+.ai-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.ai-header-title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 220px;
+}
+
+.ai-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-refresh-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.ai-init-btn {
+  padding: 12px 24px;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.ai-bottom-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.ai-bottom-btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* =========================================================
+   Mobile Responsiveness System (<= 768px and <= 480px)
+   ========================================================= */
 @media (max-width: 768px) {
+  .ai-card-header {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  .ai-header-title-box {
+    width: 100% !important;
+  }
+
+  .ai-header-actions {
+    width: 100% !important;
+  }
+
+  .ai-refresh-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 11px 16px !important;
+    font-size: 13px !important;
+  }
+
   .analytics-export-actions {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
   }
 
   .analytics-export-actions button {
-    width: 100%;
-    justify-content: center;
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 12px 14px !important;
+    font-size: 13px !important;
+  }
+
+  .analytics-strategy-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .analytics-strategy-actions button {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 11px 14px !important;
+    font-size: 13px !important;
+    box-sizing: border-box !important;
+  }
+
+  .ai-bottom-actions {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+  }
+
+  .ai-bottom-btns {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .ai-bottom-btns button {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 11px 16px !important;
+    font-size: 13px !important;
+  }
+
+  .ai-init-btn {
+    width: 100% !important;
+    padding: 13px 16px !important;
+  }
+
+  .analytics-ai-metrics-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
   }
 }

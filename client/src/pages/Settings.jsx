@@ -129,7 +129,7 @@ export default function Settings() {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+          <div className="settings-dates-grid">
             <div>
               <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                 Semester Commencement Date
@@ -190,8 +190,8 @@ export default function Settings() {
             </div>
 
             {emailNotificationsEnabled && (
-              <div style={{ paddingLeft: '27px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+              <div className="settings-nested-box">
+                <div className="settings-schedule-grid">
                   <div>
                     <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
                       Delivery Frequency / Day
@@ -252,8 +252,7 @@ export default function Settings() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                   <button
                     type="button"
-                    className="btn-secondary"
-                    style={{ fontSize: '12px', padding: '6px 14px' }}
+                    className="btn-secondary settings-test-btn"
                     onClick={handleTestEmail}
                     disabled={sendingTest || !notificationEmail.trim()}
                   >

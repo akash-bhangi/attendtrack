@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { api } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
@@ -14,6 +14,65 @@ const toLocalDateStr = (d) => {
   const day = String(dateObj.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
+
+/* ── Custom Styled Dropdown Component ───────────────────── */
+function CustomSelect({ id, value, onChange, options, placeholder }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef(null);
+
+  const handleClickOutside = useCallback((e) => {
+    if (ref.current && !ref.current.contains(e.target)) setIsOpen(false);
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [handleClickOutside]);
+
+  const selectedOption = options.find((o) => o.value === value);
+  const displayLabel = selectedOption ? selectedOption.label : placeholder || 'Select...';
+
+  return (
+    <div className="cs-wrapper" ref={ref} id={id}>
+      <button
+        type="button"
+        className={`cs-trigger${isOpen ? ' cs-open' : ''}`}
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+      >
+        <span className="cs-trigger-label">{displayLabel}</span>
+        <svg className={`cs-chevron${isOpen ? ' cs-chevron-up' : ''}`} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+      {isOpen && (
+        <ul className="cs-menu" role="listbox">
+          {options.map((opt) => (
+            <li
+              key={opt.value}
+              className={`cs-option${opt.value === value ? ' cs-selected' : ''}${opt.statusColor ? ` cs-status-${opt.statusColor}` : ''}`}
+              role="option"
+              aria-selected={opt.value === value}
+              onClick={() => {
+                onChange(opt.value);
+                setIsOpen(false);
+              }}
+            >
+              {opt.icon && <span className="cs-option-icon">{opt.icon}</span>}
+              <span className="cs-option-label">{opt.label}</span>
+              {opt.value === value && (
+                <svg className="cs-check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export default function History() {
   const { user } = useAuth();
@@ -258,6 +317,63 @@ export default function History() {
     return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
   };
 
+  const [collapsedDates, setCollapsedDates] = useState(new Set());
+
+  const toggleDateCollapse = (dateKey) => {
+    setCollapsedDates((prev) => {
+      const next = new Set(prev);
+      if (next.has(dateKey)) {
+        next.delete(dateKey);
+      } else {
+        next.add(dateKey);
+      }
+      return next;
+    });
+  };
+
+  const collapseAllDates = () => {
+    const allKeys = new Set(groupedLogs.map((g) => g.dateKey));
+    setCollapsedDates(allKeys);
+  };
+
+  const expandAllDates = () => {
+    setCollapsedDates(new Set());
+  };
+
+  const isToday = (dStr) => {
+    const todayStr = toLocalDateStr(new Date());
+    return dStr === todayStr;
+  };
+
+  const isYesterday = (dStr) => {
+    const yest = new Date();
+    yest.setDate(yest.getDate() - 1);
+    return dStr === toLocalDateStr(yest);
+  };
+
+  const groupedLogs = useMemo(() => {
+    const groups = {};
+    logs.forEach((log) => {
+      const dKey = toLocalDateStr(log.date);
+      if (!groups[dKey]) {
+        groups[dKey] = {
+          dateKey: dKey,
+          rawDate: log.date,
+          logs: [],
+          presentCount: 0,
+          absentCount: 0,
+          cancelledCount: 0
+        };
+      }
+      groups[dKey].logs.push(log);
+      if (log.status === 'Present') groups[dKey].presentCount++;
+      else if (log.status === 'Absent') groups[dKey].absentCount++;
+      else if (log.status === 'Cancelled') groups[dKey].cancelledCount++;
+    });
+
+    return Object.values(groups).sort((a, b) => new Date(b.dateKey) - new Date(a.dateKey));
+  }, [logs]);
+
   return (
     <div className="content-container">
       {/* Page Header */}
@@ -271,7 +387,7 @@ export default function History() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="history-header-actions">
           <button
             type="button"
             className={`btn-secondary ${viewMode === 'calendar' ? 'active' : ''}`}
@@ -337,122 +453,97 @@ export default function History() {
       </div>
 
       {/* Interactive Filters Panel */}
-      <div className="card-panel" style={{ marginBottom: '20px', padding: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
-          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+      <div className="history-filters-card">
+        <div className="history-filters-header">
+          <div className="history-filters-title">
             <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
             </svg>
-            Filter Records
-          </span>
+            <span>Filter Attendance Records</span>
+            {(selectedSubject !== 'all' || selectedStatus !== 'all' || startDate || endDate) && (
+              <span className="history-filter-active-pill">Active</span>
+            )}
+          </div>
 
           {(selectedSubject !== 'all' || selectedStatus !== 'all' || startDate || endDate) && (
             <button
               type="button"
+              className="history-reset-btn"
               onClick={clearFilters}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                color: 'var(--danger-text)',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                textDecoration: 'underline'
-              }}
+              title="Clear all active filters"
             >
-              Reset Filters
+              <span>↺</span>
+              <span>Reset Filters</span>
             </button>
           )}
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
-          <div>
-            <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-              Subject
+        <div className="history-filters-grid">
+          <div className="history-filter-item">
+            <label className="history-filter-label">
+              <span>📚</span>
+              <span>Subject</span>
             </label>
-            <select
+            <CustomSelect
+              id="history-filter-subject"
               value={selectedSubject}
-              onChange={(e) => setSelectedSubject(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '7px 10px',
-                fontSize: '12px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)',
-                background: 'var(--bg-surface)',
-                color: 'var(--text-main)'
-              }}
-            >
-              <option value="all">All Subjects ({subjects.length})</option>
-              {subjects.map((s) => (
-                <option key={s._id || s.id} value={s._id || s.id}>
-                  {s.name} ({s.code || 'No code'})
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-              Marked Status
-            </label>
-            <select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '7px 10px',
-                fontSize: '12px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)',
-                background: 'var(--bg-surface)',
-                color: 'var(--text-main)'
-              }}
-            >
-              <option value="all">All Statuses</option>
-              <option value="Present">Present Only</option>
-              <option value="Absent">Absent Only</option>
-              <option value="Cancelled">Cancelled Only</option>
-            </select>
-          </div>
-
-          <div>
-            <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-              From Date
-            </label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '6px 10px',
-                fontSize: '12px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)',
-                background: 'var(--bg-surface)',
-                color: 'var(--text-main)'
-              }}
+              onChange={(val) => setSelectedSubject(val)}
+              placeholder={`All Registered Subjects (${subjects.length})`}
+              options={[
+                { value: 'all', label: `All Registered Subjects (${subjects.length})`, icon: '📋' },
+                ...subjects.map((s) => ({
+                  value: s._id || s.id,
+                  label: `${s.name} (${s.code || 'No code'})`,
+                  icon: '📖',
+                })),
+              ]}
             />
           </div>
 
-          <div>
-            <label style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-              To Date
+          <div className="history-filter-item">
+            <label className="history-filter-label">
+              <span>🎯</span>
+              <span>Marked Status</span>
+            </label>
+            <CustomSelect
+              id="history-filter-status"
+              value={selectedStatus}
+              onChange={(val) => setSelectedStatus(val)}
+              placeholder="All Statuses"
+              options={[
+                { value: 'all', label: 'All Statuses', icon: '🔹' },
+                { value: 'Present', label: 'Present Only', icon: '✅', statusColor: 'safe' },
+                { value: 'Absent', label: 'Absent Only', icon: '❌', statusColor: 'danger' },
+                { value: 'Cancelled', label: 'Cancelled Only', icon: '🟣', statusColor: 'cancelled' },
+              ]}
+            />
+          </div>
+
+          <div className="history-filter-item">
+            <label className="history-filter-label" htmlFor="history-filter-from-date">
+              <span>📅</span>
+              <span>From Date</span>
             </label>
             <input
+              id="history-filter-from-date"
+              className="history-date-input"
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+            />
+          </div>
+
+          <div className="history-filter-item">
+            <label className="history-filter-label" htmlFor="history-filter-to-date">
+              <span>📅</span>
+              <span>To Date</span>
+            </label>
+            <input
+              id="history-filter-to-date"
+              className="history-date-input"
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '6px 10px',
-                fontSize: '12px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border)',
-                background: 'var(--bg-surface)',
-                color: 'var(--text-main)'
-              }}
             />
           </div>
         </div>
@@ -758,15 +849,41 @@ export default function History() {
           )}
         </div>
       ) : (
-        /* Timeline List View */
+        /* Grouped Timeline List View */
         <div className="card-panel" style={{ padding: '0', overflow: 'hidden' }}>
-          <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: 700, margin: 0, color: 'var(--text-main)' }}>
-              Semester Attendance Ledger ({logs.length} entries)
-            </h3>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-              Sorted reverse chronologically
-            </span>
+          <div style={{ padding: '14px 18px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+            <div>
+              <h3 style={{ fontSize: '14px', fontWeight: 800, margin: 0, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span>Semester Attendance Ledger</span>
+                <span className="badge-pill badge-neutral" style={{ fontSize: '11px', fontWeight: 700 }}>
+                  {logs.length} entries • {groupedLogs.length} days
+                </span>
+              </h3>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+                Organized by calendar date in reverse chronological order
+              </span>
+            </div>
+
+            {groupedLogs.length > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <button
+                  type="button"
+                  onClick={expandAllDates}
+                  className="btn-secondary"
+                  style={{ fontSize: '11px', padding: '4px 10px' }}
+                >
+                  Expand All
+                </button>
+                <button
+                  type="button"
+                  onClick={collapseAllDates}
+                  className="btn-secondary"
+                  style={{ fontSize: '11px', padding: '4px 10px' }}
+                >
+                  Collapse All
+                </button>
+              </div>
+            )}
           </div>
 
           {logs.length === 0 ? (
@@ -774,163 +891,213 @@ export default function History() {
               No attendance logs found matching the selected criteria.
             </div>
           ) : (
-            <>
-              {/* Desktop Ledger Table */}
-              <div className="history-desktop-table" style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '12.5px' }}>
-                  <thead>
-                    <tr style={{ background: 'var(--bg-subtle)', borderBottom: '1px solid var(--border)', color: 'var(--text-muted)', fontWeight: 600 }}>
-                      <th style={{ padding: '10px 16px' }}>Date</th>
-                      <th style={{ padding: '10px 16px' }}>Subject</th>
-                      <th style={{ padding: '10px 16px' }}>Code / Type</th>
-                      <th style={{ padding: '10px 16px' }}>Faculty</th>
-                      <th style={{ padding: '10px 16px' }}>Status</th>
-                      <th style={{ padding: '10px 16px' }}>Notes</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {logs.map((log) => {
-                      const statusClass =
-                        log.status === 'Present'
-                          ? 'badge-safe'
-                          : log.status === 'Absent'
-                          ? 'badge-danger'
-                          : 'badge-cancelled';
+            <div className="ledger-groups-container">
+              {groupedLogs.map((group) => {
+                const isCollapsed = collapsedDates.has(group.dateKey);
+                const today = isToday(group.dateKey);
+                const yesterday = isYesterday(group.dateKey);
 
-                      return (
-                        <tr
-                          key={log._id}
-                          style={{
-                            borderBottom: '1px solid var(--border)',
-                            transition: 'background 0.1s ease'
-                          }}
-                        >
-                          <td style={{ padding: '11px 16px', fontWeight: 600, color: 'var(--text-main)', whiteSpace: 'nowrap' }}>
-                            {formatDateDisplay(log.date)}
-                          </td>
-                          <td style={{ padding: '11px 16px', fontWeight: 700, color: 'var(--text-main)' }}>
-                            {log.subjectId?.name || 'Deleted Subject'}
-                          </td>
-                          <td style={{ padding: '11px 16px', color: 'var(--text-muted)' }}>
-                            {log.subjectId?.code || '—'} • {log.subjectId?.type || 'Lecture'}
-                          </td>
-                          <td style={{ padding: '11px 16px', color: 'var(--text-muted)' }}>
-                            {log.subjectId?.faculty || '—'}
-                          </td>
-                          <td style={{ padding: '11px 16px' }}>
-                            <span className={`badge-pill ${statusClass}`}>
-                              {log.status === 'Present' && '✓ '}
-                              {log.status === 'Absent' && '✕ '}
-                              {log.status === 'Cancelled' && '— '}
-                              {log.status}
-                            </span>
-                          </td>
-                          <td
-                            style={{
-                              padding: '11px 16px',
-                              cursor: 'pointer'
-                            }}
-                            onClick={() => openHistoryNoteModal(log)}
-                            title="Click to add or edit note"
-                          >
-                            <span
-                              style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '6px',
-                                padding: '3px 8px',
-                                borderRadius: '4px',
-                                background: log.notes ? 'var(--bg-subtle)' : 'transparent',
-                                border: log.notes ? '1px solid var(--border)' : '1px dashed var(--border)',
-                                color: log.notes ? 'var(--text-main)' : 'var(--text-dim)',
-                                fontSize: '11.5px',
-                                fontStyle: log.notes ? 'normal' : 'italic'
-                              }}
-                            >
-                              <span>{log.notes ? `📝 ${log.notes}` : '+ Add note'}</span>
-                              <span style={{ fontSize: '10px', opacity: 0.6 }}>✏️</span>
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Mobile Timeline Cards */}
-              <div className="history-mobile-cards">
-                {logs.map((log) => {
-                  const statusClass =
-                    log.status === 'Present'
-                      ? 'badge-safe'
-                      : log.status === 'Absent'
-                      ? 'badge-danger'
-                      : 'badge-cancelled';
-
-                  const cardClass =
-                    log.status === 'Present'
-                      ? 'status-present'
-                      : log.status === 'Absent'
-                      ? 'status-absent'
-                      : 'status-cancelled';
-
-                  return (
-                    <div key={log._id} className={`history-log-card ${cardClass}`}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
-                        <span style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--text-muted)' }}>
-                          📅 {formatDateDisplay(log.date)}
+                return (
+                  <div key={group.dateKey} className="ledger-date-group">
+                    {/* Date Header Strip */}
+                    <div
+                      className="ledger-date-header"
+                      onClick={() => toggleDateCollapse(group.dateKey)}
+                      title="Click to expand/collapse day"
+                    >
+                      <div className="ledger-date-left">
+                        <span className="ledger-toggle-arrow">
+                          {isCollapsed ? '▶' : '▼'}
                         </span>
-                        <span className={`badge-pill ${statusClass}`}>
-                          {log.status === 'Present' && '✓ '}
-                          {log.status === 'Absent' && '✕ '}
-                          {log.status === 'Cancelled' && '— '}
-                          {log.status}
-                        </span>
-                      </div>
-
-                      <div style={{ fontSize: '14.5px', fontWeight: 800, color: 'var(--text-main)', lineHeight: '1.25' }}>
-                        {log.subjectId?.name || 'Deleted Subject'}
-                      </div>
-
-                      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px', fontSize: '11px' }}>
-                        {log.subjectId?.code && <span className="course-code-tag">{log.subjectId.code}</span>}
-                        <span className="badge-pill badge-neutral" style={{ fontSize: '10px' }}>
-                          {log.subjectId?.type || 'Lecture'}
-                        </span>
-                        {log.subjectId?.faculty && (
-                          <span style={{ fontSize: '11.5px', color: 'var(--text-muted)' }}>
-                            • {log.subjectId.faculty}
+                        <div className="ledger-date-headings">
+                          <span className="ledger-date-title">
+                            {formatDateDisplay(group.rawDate)}
                           </span>
+                          {today && (
+                            <span className="ledger-status-tag tag-today">
+                              Today
+                            </span>
+                          )}
+                          {yesterday && (
+                            <span className="ledger-status-tag tag-yesterday">
+                              Yesterday
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="ledger-date-summary-chip">
+                        <span className="ledger-chip-count">
+                          {group.logs.length} {group.logs.length === 1 ? 'Class' : 'Classes'}
+                        </span>
+                        {(group.presentCount > 0 || group.absentCount > 0 || group.cancelledCount > 0) && (
+                          <>
+                            <span className="ledger-chip-divider">•</span>
+                            {group.presentCount > 0 && (
+                              <span className="ledger-chip-safe">{group.presentCount}✓</span>
+                            )}
+                            {group.absentCount > 0 && (
+                              <span className="ledger-chip-danger">{group.absentCount}✕</span>
+                            )}
+                            {group.cancelledCount > 0 && (
+                              <span className="ledger-chip-neutral">{group.cancelledCount}—</span>
+                            )}
+                          </>
                         )}
                       </div>
-
-                      <div
-                        onClick={() => openHistoryNoteModal(log)}
-                        style={{
-                          fontSize: '11.5px',
-                          color: log.notes ? 'var(--text-main)' : 'var(--text-dim)',
-                          fontStyle: log.notes ? 'normal' : 'italic',
-                          background: 'var(--bg-subtle)',
-                          padding: '6px 10px',
-                          borderRadius: '6px',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          border: '1px solid var(--border)',
-                          marginTop: '4px'
-                        }}
-                        title="Click to add or edit note"
-                      >
-                        <span>{log.notes ? `📝 Note: "${log.notes}"` : '➕ Add Note / Reason'}</span>
-                        <span style={{ fontSize: '10px', opacity: 0.7 }}>✏️</span>
-                      </div>
                     </div>
-                  );
-                })}
-              </div>
-            </>
+
+                    {!isCollapsed && (
+                      <>
+                        {/* Desktop Table View */}
+                        <div className="ledger-desktop-table" style={{ overflowX: 'auto' }}>
+                          <table className="ledger-table">
+                            <thead>
+                              <tr>
+                                <th>Subject</th>
+                                <th>Code / Type</th>
+                                <th>Faculty</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {group.logs.map((log) => {
+                                const statusClass =
+                                  log.status === 'Present'
+                                    ? 'badge-safe'
+                                    : log.status === 'Absent'
+                                    ? 'badge-danger'
+                                    : 'badge-cancelled';
+
+                                return (
+                                  <tr key={log._id}>
+                                    <td style={{ fontWeight: 700, color: 'var(--text-main)' }}>
+                                      {log.subjectId?.name || 'Deleted Subject'}
+                                    </td>
+                                    <td style={{ color: 'var(--text-muted)' }}>
+                                      {log.subjectId?.code ? `${log.subjectId.code} • ` : ''}
+                                      {log.subjectId?.type || 'Lecture'}
+                                    </td>
+                                    <td style={{ color: 'var(--text-muted)' }}>
+                                      {log.subjectId?.faculty || '—'}
+                                    </td>
+                                    <td>
+                                      <span className={`badge-pill ${statusClass}`}>
+                                        {log.status === 'Present' && '✓ '}
+                                        {log.status === 'Absent' && '✕ '}
+                                        {log.status === 'Cancelled' && '— '}
+                                        {log.status}
+                                      </span>
+                                    </td>
+                                    <td
+                                      style={{ cursor: 'pointer' }}
+                                      onClick={() => openHistoryNoteModal(log)}
+                                      title="Click to add or edit note"
+                                    >
+                                      <span
+                                        style={{
+                                          display: 'inline-flex',
+                                          alignItems: 'center',
+                                          gap: '6px',
+                                          padding: '3px 8px',
+                                          borderRadius: '4px',
+                                          background: log.notes ? 'var(--bg-subtle)' : 'transparent',
+                                          border: log.notes ? '1px solid var(--border)' : '1px dashed var(--border)',
+                                          color: log.notes ? 'var(--text-main)' : 'var(--text-dim)',
+                                          fontSize: '11.5px',
+                                          fontStyle: log.notes ? 'normal' : 'italic'
+                                        }}
+                                      >
+                                        <span>{log.notes ? `📝 ${log.notes}` : '+ Add note'}</span>
+                                        <span style={{ fontSize: '10px', opacity: 0.6 }}>✏️</span>
+                                      </span>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+
+                        {/* Mobile Streamlined Session List */}
+                        <div className="ledger-mobile-list">
+                          {group.logs.map((log) => {
+                            const statusClass =
+                              log.status === 'Present'
+                                ? 'badge-safe'
+                                : log.status === 'Absent'
+                                ? 'badge-danger'
+                                : 'badge-cancelled';
+
+                            const itemStatusClass =
+                              log.status === 'Present'
+                                ? 'status-present'
+                                : log.status === 'Absent'
+                                ? 'status-absent'
+                                : 'status-cancelled';
+
+                            return (
+                              <div key={log._id} className={`ledger-row-item ${itemStatusClass}`}>
+                                <div className="ledger-row-top">
+                                  <div className="ledger-row-main-info">
+                                    <div className="ledger-row-subject">
+                                      {log.subjectId?.name || 'Deleted Subject'}
+                                    </div>
+                                    <div className="ledger-row-meta">
+                                      {log.subjectId?.code && (
+                                        <span className="ledger-meta-code">{log.subjectId.code}</span>
+                                      )}
+                                      <span>{log.subjectId?.type || 'Lecture'}</span>
+                                      {log.subjectId?.faculty && (
+                                        <span>• {log.subjectId.faculty}</span>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="ledger-row-status-box">
+                                    <span className={`badge-pill ${statusClass}`}>
+                                      {log.status === 'Present' && '✓ '}
+                                      {log.status === 'Absent' && '✕ '}
+                                      {log.status === 'Cancelled' && '— '}
+                                      {log.status}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="ledger-row-note-row">
+                                  {log.notes ? (
+                                    <div
+                                      className="ledger-note-bubble"
+                                      onClick={() => openHistoryNoteModal(log)}
+                                      title="Click to view/edit note"
+                                    >
+                                      <span>📝</span>
+                                      <span className="ledger-note-text">{log.notes}</span>
+                                      <span className="ledger-note-edit">✏️</span>
+                                    </div>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      className="ledger-add-note-btn"
+                                      onClick={() => openHistoryNoteModal(log)}
+                                      title="Add note or reason"
+                                    >
+                                      <span>＋</span>
+                                      <span>Add note</span>
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           )}
         </div>
       )}
@@ -1032,7 +1199,7 @@ export default function History() {
               }}
             />
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px' }}>
+            <div className="history-note-actions">
               {editingNoteLog.notes ? (
                 <button
                   type="button"
