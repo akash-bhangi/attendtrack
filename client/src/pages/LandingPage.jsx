@@ -69,11 +69,10 @@ export default function LandingPage() {
       <header className="landing-header">
         <nav className="landing-nav">
           <a href="#" className="landing-brand">
-            <div className="logo-icon" style={{ width: '32px', height: '32px', fontSize: '14px', borderRadius: '8px' }}>
+            <div className="logo-icon landing-brand-logo">
               AT
             </div>
-            <span>AttendTrack</span>
-            <span className="landing-brand-badge">v2.0</span>
+            <span className="landing-brand-name">AttendTrack</span>
           </a>
 
           <div className="landing-nav-links">
@@ -94,7 +93,7 @@ export default function LandingPage() {
           <div className="landing-nav-actions">
             <button
               onClick={toggleTheme}
-              className="theme-toggle-btn"
+              className="theme-toggle-btn landing-theme-toggle"
               title="Toggle Dark/Light Mode"
               aria-label="Toggle theme"
             >
@@ -104,16 +103,16 @@ export default function LandingPage() {
             <button
               onClick={handleDemoLogin}
               disabled={authLoading}
-              className="btn-hero-demo"
-              style={{ padding: '8px 14px', fontSize: '12px' }}
+              className="btn-nav-demo"
+              title="Try Demo without signing in"
             >
-              ⚡ Demo
+              <span className="btn-nav-icon">⚡</span>
+              <span>Demo</span>
             </button>
 
             <button
               onClick={() => setShowAuthModal(true)}
-              className="btn-hero-primary"
-              style={{ padding: '8px 16px', fontSize: '12px' }}
+              className="btn-nav-primary"
             >
               Sign In
             </button>
