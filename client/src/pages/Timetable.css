@@ -30,19 +30,32 @@
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
+  padding: 10px 4px 6px 4px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.timetable-day-strip::-webkit-scrollbar {
+  display: none;
 }
 
 .timetable-day-chip {
-  flex: 1;
-  min-width: 65px;
-  text-align: center;
-  padding: 8px 6px;
-  border-radius: var(--radius-sm);
+  flex: 1 1 0;
+  min-width: 60px;
+  height: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 4px;
+  border-radius: var(--radius-md);
   background: var(--bg-subtle);
   border: 1px solid var(--border);
   cursor: pointer;
   transition: all 0.15s ease;
+  position: relative;
+  text-align: center;
 }
 
 .timetable-day-chip:hover {
@@ -53,6 +66,7 @@
 .timetable-day-chip.active {
   background: var(--primary);
   border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .timetable-day-chip.active .day-name {
@@ -66,7 +80,6 @@
 
 .timetable-day-chip.is-today {
   border: 2px solid var(--accent);
-  position: relative;
 }
 
 .timetable-day-chip.is-today:not(.active) {
@@ -79,22 +92,28 @@
 }
 
 .timetable-day-chip .today-dot {
-  font-size: 8px;
-  font-weight: 800;
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  font-size: 7.5px;
+  font-weight: 900;
   letter-spacing: 0.5px;
-  padding: 1px 4px;
-  border-radius: 3px;
+  padding: 1px 6px;
+  border-radius: 999px;
   background: var(--accent);
   color: #ffffff;
-  margin: 0 auto 3px auto;
   text-transform: uppercase;
-  width: fit-content;
-  display: block;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.35);
+  z-index: 2;
+  line-height: 1.3;
 }
 
 .timetable-day-chip.active .today-dot {
-  background: var(--primary-text);
-  color: var(--primary);
+  background: var(--accent);
+  color: #ffffff;
 }
 
 .timetable-day-chip .day-name {
@@ -103,13 +122,16 @@
   color: var(--text-muted);
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.3px;
+  line-height: 1.2;
 }
 
 .timetable-day-chip .slot-count {
   display: block;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
   color: var(--text-main);
+  line-height: 1.2;
   margin-top: 2px;
 }
 
@@ -154,9 +176,9 @@
 
   .timetable-day-strip {
     display: flex !important;
-    gap: 4px !important;
+    gap: 6px !important;
     overflow-x: auto !important;
-    padding-bottom: 4px !important;
+    padding: 10px 4px 6px 4px !important;
     margin-bottom: 16px !important;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -169,18 +191,25 @@
   .timetable-day-chip {
     flex: 1 1 0 !important;
     min-width: 48px !important;
-    padding: 7px 3px !important;
+    height: 52px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 4px 2px !important;
     text-align: center !important;
-    border-radius: var(--radius-sm) !important;
+    border-radius: var(--radius-md) !important;
     background: var(--bg-subtle) !important;
     border: 1px solid var(--border) !important;
     cursor: pointer !important;
+    position: relative !important;
     transition: all 0.15s ease !important;
   }
 
   .timetable-day-chip.active {
     background: var(--primary) !important;
     border-color: var(--primary) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12) !important;
   }
 
   .timetable-day-chip.active .day-name {
@@ -203,31 +232,50 @@
   }
 
   .timetable-day-chip .today-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--accent);
-    margin: 0 auto 3px auto;
+    position: absolute !important;
+    top: -6px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: block !important;
+    font-size: 6.5px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.5px !important;
+    padding: 1px 4px !important;
+    border-radius: 999px !important;
+    background: var(--accent) !important;
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+    box-shadow: 0 1px 3px rgba(37, 99, 235, 0.35) !important;
+    z-index: 2 !important;
+    line-height: 1.2 !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
   }
 
   .timetable-day-chip.active .today-dot {
-    background: var(--primary-text);
+    background: var(--accent) !important;
+    color: #ffffff !important;
   }
 
   .timetable-day-chip .day-name {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-main);
-    display: block;
-    line-height: 1.2;
-    text-transform: uppercase;
+    font-size: 9.5px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px !important;
+    color: var(--text-muted) !important;
+    display: block !important;
+    line-height: 1.2 !important;
+    text-transform: uppercase !important;
   }
 
   .timetable-day-chip .slot-count {
-    font-size: 10px;
-    color: var(--text-muted);
-    display: block;
-    margin-top: 2px;
+    font-size: 11px !important;
+    font-weight: 800 !important;
+    color: var(--text-main) !important;
+    display: block !important;
+    line-height: 1.2 !important;
+    margin-top: 1px !important;
   }
 
   .timetable-desktop-table {

@@ -78,21 +78,34 @@
 .date-strip {
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  padding: 10px 4px 6px 4px;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.date-strip::-webkit-scrollbar {
+  display: none;
 }
 
 .date-chip {
-  flex: 1;
-  min-width: 58px;
-  text-align: center;
-  padding: 8px 4px;
+  flex: 1 1 0;
+  min-width: 52px;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 4px;
   background: var(--bg-subtle);
   border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-size: 12px;
   transition: all 0.15s ease;
+  position: relative;
+  text-align: center;
 }
 
 .date-chip .day {
@@ -101,18 +114,23 @@
   color: var(--text-muted);
   font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.4px;
+  line-height: 1.2;
 }
 
 .date-chip .num {
   display: block;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   color: var(--text-main);
+  line-height: 1.2;
+  margin-top: 2px;
 }
 
 .date-chip.active {
   background: var(--primary);
   border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 .date-chip.active .day {
@@ -126,7 +144,6 @@
 
 .date-chip.is-today {
   border: 2px solid var(--accent);
-  position: relative;
 }
 
 .date-chip.is-today:not(.active) {
@@ -143,22 +160,28 @@
 }
 
 .today-indicator {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
   display: block;
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: 0.6px;
-  padding: 1px 4px;
-  border-radius: 3px;
+  font-size: 7.5px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  padding: 1px 6px;
+  border-radius: 999px;
   background: var(--accent);
   color: #ffffff;
-  margin: 0 auto 3px auto;
   text-transform: uppercase;
-  width: fit-content;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.35);
+  z-index: 2;
+  line-height: 1.3;
 }
 
 .date-chip.active .today-indicator {
-  background: var(--primary-text);
-  color: var(--primary);
+  background: var(--accent);
+  color: #ffffff;
 }
 
 /* =========================================================
@@ -793,7 +816,7 @@
 
   .date-strip {
     gap: 6px;
-    padding-bottom: 4px;
+    padding: 8px 2px 4px 2px;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
@@ -804,15 +827,23 @@
 
   .date-chip {
     min-width: 44px;
-    padding: 6px 2px;
+    height: 52px;
+    padding: 4px 2px;
   }
 
   .date-chip .day {
-    font-size: 9px;
+    font-size: 8.5px;
   }
 
   .date-chip .num {
     font-size: 13px;
+    margin-top: 1px;
+  }
+
+  .today-indicator {
+    font-size: 6.5px;
+    padding: 1px 4px;
+    top: -6px;
   }
 
   .kpi-grid {

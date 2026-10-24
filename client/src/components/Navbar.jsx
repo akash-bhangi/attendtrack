@@ -5,7 +5,7 @@ import IosInstallModal from './IosInstallModal';
 import './Navbar.css';
 
 export default function Navbar() {
-  const { user, theme, toggleTheme } = useAuth();
+  const { user, logout, theme, toggleTheme } = useAuth();
   const { isInstallable, showIOSPrompt, setShowIOSPrompt, triggerInstall } = usePwaInstall();
 
   const getInitials = (name) => {
@@ -66,6 +66,21 @@ export default function Navbar() {
           <div className="user-avatar" style={{ width: '28px', height: '28px', fontSize: '10px' }}>
             {getInitials(user?.name)}
           </div>
+
+          {/* Mobile Sign Out Button */}
+          <button
+            onClick={logout}
+            className="mobile-logout-btn"
+            title="Sign Out"
+            aria-label="Sign Out"
+          >
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>Exit</span>
+          </button>
         </div>
       </header>
 
