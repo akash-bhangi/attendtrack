@@ -12,12 +12,12 @@ const GOOGLE_CLIENT_ID =
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-      <NotificationProvider>
+    <NotificationProvider>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
         <AuthProvider>
           <App />
         </AuthProvider>
-      </NotificationProvider>
-    </GoogleOAuthProvider>
+      </GoogleOAuthProvider>
+    </NotificationProvider>
   </React.StrictMode>
 );

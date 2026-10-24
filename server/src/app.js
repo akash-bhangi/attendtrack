@@ -32,7 +32,6 @@ app.put('/api/auth/settings', protect, authController.updateSettings);
 // ================= SUBJECTS ROUTES =================
 app.get('/api/subjects', protect, subjectController.getSubjects);
 app.post('/api/subjects', protect, subjectController.createSubject);
-app.post('/api/subjects/batch-baseline', protect, subjectController.batchUpdateBaselines);
 app.put('/api/subjects/:id', protect, subjectController.updateSubject);
 app.delete('/api/subjects/:id', protect, subjectController.deleteSubject);
 

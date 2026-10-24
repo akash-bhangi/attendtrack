@@ -4,6 +4,7 @@ import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
 import BottomNav from './components/BottomNav';
 import Login from './pages/Login';
+import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import Subjects from './pages/Subjects';
 import Timetable from './pages/Timetable';
@@ -27,7 +28,7 @@ export default function App() {
   }
 
   if (!user) {
-    return <Login />;
+    return <LandingPage />;
   }
 
   return (

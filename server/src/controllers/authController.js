@@ -189,9 +189,13 @@ const devLogin = async (req, res) => {
 // @desc    Get Current User Profile
 // @route   GET /api/auth/me
 const getMe = async (req, res) => {
+  const userObj = req.user.toObject ? req.user.toObject() : { ...req.user };
+  delete userObj.smtpPass;
+  delete userObj.__v;
+
   res.status(200).json({
     success: true,
-    data: req.user
+    data: userObj
   });
 };
 
@@ -249,9 +253,13 @@ const updateSettings = async (req, res) => {
 
     await user.save();
 
+    const savedObj = user.toObject ? user.toObject() : { ...user };
+    delete savedObj.smtpPass;
+    delete savedObj.__v;
+
     res.status(200).json({
       success: true,
-      data: user,
+      data: savedObj,
       message: 'Settings updated successfully'
     });
   } catch (error) {
