@@ -1,11 +1,9 @@
 import React from 'react';
 import { useAuth } from '../context/AuthContext';
-import { usePwaInstall } from '../utils/usePwaInstall';
 import './Sidebar.css';
 
 export default function Sidebar({ currentTab, onTabChange }) {
   const { user, logout, theme, toggleTheme } = useAuth();
-  const { isInstallable, triggerInstall } = usePwaInstall();
 
   const getInitials = (name) => {
     if (!name) return 'ST';
@@ -98,26 +96,6 @@ export default function Sidebar({ currentTab, onTabChange }) {
           </button>
         </li>
       </ul>
-
-      {isInstallable && (
-        <div style={{ padding: '0 12px 10px 12px' }}>
-          <button
-            onClick={triggerInstall}
-            className="btn-secondary"
-            style={{
-              width: '100%',
-              fontSize: '12px',
-              padding: '8px 10px',
-              justifyContent: 'center',
-              background: 'var(--bg-subtle)',
-              border: '1px dashed var(--border-darker)'
-            }}
-          >
-            <span>📲</span>
-            <span>Install App</span>
-          </button>
-        </div>
-      )}
 
       <div className="sidebar-footer">
         <div className="user-profile-card">

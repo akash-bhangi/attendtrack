@@ -254,7 +254,10 @@ export default function Timetable() {
                 >
                   {isToday && <span className="today-dot">TODAY</span>}
                   <span className="day-name">{day.slice(0, 3)}</span>
-                  <span className="slot-count">{count} {count === 1 ? 'Slot' : 'Slots'}</span>
+                  <span className="slot-count">
+                    {count}
+                    <span className="slot-count-label"> {count === 1 ? 'Slot' : 'Slots'}</span>
+                  </span>
                 </div>
               );
             });

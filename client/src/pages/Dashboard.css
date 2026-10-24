@@ -77,27 +77,22 @@
 /* Calendar Date Strip */
 .date-strip {
   display: flex;
+  width: 100%;
   gap: 8px;
   margin-bottom: 20px;
-  padding: 10px 4px 6px 4px;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-}
-
-.date-strip::-webkit-scrollbar {
-  display: none;
+  padding: 10px 0 6px 0;
+  box-sizing: border-box;
 }
 
 .date-chip {
   flex: 1 1 0;
-  min-width: 52px;
+  min-width: 0;
   height: 56px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 6px 4px;
+  padding: 6px 2px;
   background: var(--bg-subtle);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -106,6 +101,7 @@
   transition: all 0.15s ease;
   position: relative;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .date-chip .day {
@@ -815,20 +811,19 @@
   }
 
   .date-strip {
-    gap: 6px;
-    padding: 8px 2px 4px 2px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .date-strip::-webkit-scrollbar {
-    display: none;
+    width: 100%;
+    gap: 4px;
+    padding: 8px 0 4px 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
   }
 
   .date-chip {
-    min-width: 44px;
-    height: 52px;
-    padding: 4px 2px;
+    flex: 1 1 0;
+    min-width: 0;
+    height: 50px;
+    padding: 4px 1px;
+    box-sizing: border-box;
   }
 
   .date-chip .day {
@@ -841,9 +836,10 @@
   }
 
   .today-indicator {
-    font-size: 6.5px;
-    padding: 1px 4px;
+    font-size: 6px;
+    padding: 1px 3.5px;
     top: -6px;
+    letter-spacing: 0.2px;
   }
 
   .kpi-grid {
@@ -988,6 +984,28 @@
 }
 
 @media (max-width: 360px) {
+  .date-strip {
+    gap: 3px;
+  }
+
+  .date-chip {
+    height: 48px;
+  }
+
+  .date-chip .day {
+    font-size: 8px;
+  }
+
+  .date-chip .num {
+    font-size: 12px;
+  }
+
+  .today-indicator {
+    font-size: 5.5px;
+    padding: 1px 3px;
+    top: -5px;
+  }
+
   .course-item {
     padding: 10px 8px;
     gap: 8px;
