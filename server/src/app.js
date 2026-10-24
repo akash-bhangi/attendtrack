@@ -18,8 +18,18 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Health Check
-app.get('/health', (req, res) => {
+// Root Welcome Endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({
+    name: 'AttendTrack API Server',
+    status: 'online',
+    version: '2.0.0',
+    health: '/health'
+  });
+});
+
+// Health Check (Supports both /health and /api/health)
+app.get(['/health', '/api/health'], (req, res) => {
   res.status(200).json({ status: 'healthy', timestamp: new Date() });
 });
 
