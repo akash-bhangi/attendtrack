@@ -1,9 +1,13 @@
-const API_BASE = '/api';
+const rawBase = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = rawBase.replace(/\/+$/, '');
 
 const resolveUrl = (endpoint) => {
   if (!endpoint) return API_BASE;
-  const clean = endpoint.startsWith('/api') ? endpoint.slice(4) : endpoint;
-  return `${API_BASE}${clean.startsWith('/') ? clean : `/${clean}`}`;
+  let clean = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  if (API_BASE.endsWith('/api') && clean.startsWith('/api')) {
+    clean = clean.slice(4);
+  }
+  return `${API_BASE}${clean}`;
 };
 
 const getHeaders = (isFormData = false) => {
