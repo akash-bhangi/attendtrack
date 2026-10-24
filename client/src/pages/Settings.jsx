@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNotification } from '../context/NotificationContext';
-import { usePwaInstall } from '../utils/usePwaInstall';
-import IosInstallModal from '../components/IosInstallModal';
 import { api } from '../api/client';
 import { formatTime12h } from '../utils/formatters';
 import './Settings.css';
@@ -20,7 +18,6 @@ const safeFormatDate = (dateVal) => {
 export default function Settings() {
   const { user, updateProfile } = useAuth();
   const notify = useNotification();
-  const { isInstallable, isStandalone, showIOSPrompt, setShowIOSPrompt, triggerInstall } = usePwaInstall();
 
   const [startDate, setStartDate] = useState(safeFormatDate(user?.semesterStartDate));
   const [endDate, setEndDate] = useState(safeFormatDate(user?.semesterEndDate));
@@ -31,9 +28,7 @@ export default function Settings() {
   const [notificationTime, setNotificationTime] = useState(user?.notificationTime || '20:00');
   const [notificationDay, setNotificationDay] = useState(user?.notificationDay || 'Sunday');
   const [notificationEmail, setNotificationEmail] = useState(
-    user?.notificationEmail ||
-      (user?.email === 'student.demo@college.edu' ? 'bhangiakash10@gmail.com' : user?.email) ||
-      ''
+    user?.notificationEmail || user?.email || ''
   );
   const [saved, setSaved] = useState(false);
   const [sendingTest, setSendingTest] = useState(false);
@@ -49,11 +44,7 @@ export default function Settings() {
       if (user.emailNotificationsEnabled !== undefined) setEmailNotificationsEnabled(user.emailNotificationsEnabled);
       if (user.notificationTime) setNotificationTime(user.notificationTime);
       if (user.notificationDay) setNotificationDay(user.notificationDay);
-      setNotificationEmail(
-        user.notificationEmail ||
-          (user.email === 'student.demo@college.edu' ? 'bhangiakash10@gmail.com' : user.email) ||
-          ''
-      );
+      setNotificationEmail(user.notificationEmail || user.email || '');
     }
   }, [user]);
 
@@ -236,7 +227,7 @@ export default function Settings() {
                     type="email"
                     value={notificationEmail}
                     onChange={(e) => setNotificationEmail(e.target.value)}
-                    placeholder="e.g. bhangiakash10@gmail.com"
+                    placeholder="e.g. student@college.edu"
                     style={{ width: '100%', padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--bg-surface)', color: 'var(--text-main)', fontSize: '13px', boxSizing: 'border-box' }}
                   />
                 </div>
@@ -293,50 +284,6 @@ export default function Settings() {
           </div>
         </form>
       </div>
-
-      {/* App Installation & Offline Access Card */}
-      <div className="card-panel" style={{ marginTop: '24px' }}>
-        <h2 className="card-panel-title">App Installation & Offline Access</h2>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginTop: '12px' }}>
-          <div style={{ maxWidth: '480px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '20px' }}>📲</span>
-              <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>
-                AttendTrack Progressive Web App
-              </span>
-              {isStandalone && (
-                <span style={{ fontSize: '10px', fontWeight: 700, padding: '2px 8px', background: 'var(--safe-bg, #ecfdf5)', color: 'var(--safe-text, #059669)', border: '1px solid var(--safe-border, #a7f3d0)', borderRadius: '999px' }}>
-                  ✓ Installed
-                </span>
-              )}
-            </div>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '6px 0 0 0', lineHeight: '1.5' }}>
-              {isStandalone
-                ? 'AttendTrack is running as an installed application on your device. Fast offline caching, instant app launch, and full-screen experience are active.'
-                : 'Install AttendTrack directly to your phone home screen or PC desktop. Enjoy 1-tap access, native-app feel, and offline attendance tracking without downloading from an app store.'}
-            </p>
-          </div>
-
-          {!isStandalone ? (
-            <button
-              type="button"
-              onClick={triggerInstall}
-              className="btn-primary"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', padding: '9px 16px' }}
-              title="Install AttendTrack App"
-            >
-              <span>📲</span>
-              <span>Install AttendTrack</span>
-            </button>
-          ) : (
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', fontWeight: 600, color: 'var(--safe-text, #059669)', padding: '6px 12px', background: 'var(--safe-bg, #ecfdf5)', borderRadius: 'var(--radius-sm)' }}>
-              <span>✓ App Active</span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <IosInstallModal isOpen={showIOSPrompt} onClose={() => setShowIOSPrompt(false)} />
     </div>
   );
 }

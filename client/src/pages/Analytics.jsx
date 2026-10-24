@@ -21,7 +21,7 @@ export default function Analytics() {
     if (user) {
       setTargetRecipient(
         user.notificationEmail ||
-        (user.email === 'student.demo@college.edu' ? 'bhangiakash10@gmail.com' : user.email) ||
+        user.email ||
         ''
       );
     }
@@ -558,7 +558,7 @@ export default function Analytics() {
                 type="email"
                 value={targetRecipient}
                 onChange={(e) => setTargetRecipient(e.target.value)}
-                placeholder="e.g. bhangiakash10@gmail.com"
+                placeholder="e.g. student@college.edu"
                 style={{
                   width: '100%',
                   padding: '8px 12px',
