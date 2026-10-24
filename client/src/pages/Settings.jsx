@@ -18,7 +18,7 @@ const safeFormatDate = (dateVal) => {
 };
 
 export default function Settings() {
-  const { user, updateProfile } = useAuth();
+  const { user, updateProfile, logout } = useAuth();
   const notify = useNotification();
   const { isInstallable, isStandalone, showIOSPrompt, setShowIOSPrompt, triggerInstall } = usePwaInstall();
 
