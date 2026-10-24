@@ -1,9 +1,18 @@
 # 🎓 AttendTrack — Academic Attendance Management & 75% Compliance Engine
 
+[![Live Web App](https://img.shields.io/badge/Live_App-attendtrack.vercel.app-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://attendtrack.vercel.app)
+[![API Server](https://img.shields.io/badge/Backend_API-Render_Cloud-000000?style=for-the-badge&logo=render&logoColor=white)](https://attendtrack-api.onrender.com)
+[![Database](https://img.shields.io/badge/Database-MongoDB_Atlas-47a248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+
+> 🚀 **Live Production Application:** [https://attendtrack.vercel.app](https://attendtrack.vercel.app)  
+> ⚡ **Live Backend API (Healthcheck):** [https://attendtrack-api.onrender.com/health](https://attendtrack-api.onrender.com/health)  
+> 📱 **PWA:** Installable directly on iOS, Android, and Desktop without an App Store.
+
 [![React](https://img.shields.io/badge/Frontend-React%2019-61dafb?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Bundler-Vite%208-646cff?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Node.js](https://img.shields.io/badge/Backend-Node.js%20Express%205-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![MongoDB](https://img.shields.io/badge/Database-MongoDB%20Mongoose-47a248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![MongoDB](https://img.shields.io/badge/Database-MongoDB%20Atlas-47a248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Gemini](https://img.shields.io/badge/AI-Google%20Gemini%20Vision-4285F4?logo=google&logoColor=white)](https://ai.google.dev/)
 [![PWA](https://img.shields.io/badge/PWA-Installable%20Web%20App-5A0FC8?logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 [![Styling](https://img.shields.io/badge/CSS-Modular%20Vanilla%20CSS-1572B6?logo=css3&logoColor=white)](https://www.w3.org/Style/CSS/)
@@ -14,6 +23,7 @@
 
 ## 📑 Table of Contents
 
+- [Live Production Deployment](#-live-production-deployment)
 - [Overview & The Problem](#-overview--the-problem)
 - [Key Features](#-key-features)
 - [Mathematical Logic Engine (75% Criteria)](#-mathematical-logic-engine-75-criteria)
@@ -29,6 +39,19 @@
 - [API Reference](#-api-reference)
 - [Automation & AI Integrations](#-automation--ai-integrations)
 - [Contributing & License](#-contributing--license)
+
+---
+
+## 🌐 Live Production Deployment
+
+AttendTrack is deployed on modern, high-availability cloud infrastructure with 100% free-tier architecture:
+
+| Component | Platform | Production URL | Notes |
+| :--- | :--- | :--- | :--- |
+| **Frontend Web App** | **Vercel** | [https://attendtrack.vercel.app](https://attendtrack.vercel.app) | Global Edge CDN, automated HTTPS, PWA enabled |
+| **Backend API** | **Render** | [https://attendtrack-api.onrender.com](https://attendtrack-api.onrender.com) | Node.js Express 5 service, CORS-protected |
+| **Cloud Database** | **MongoDB Atlas** | Cloud M0 Cluster | Automated multi-region backup & SRV resolution |
+| **AI Vision OCR** | **Google Gemini** | Google AI Studio | Gemini 1.5 / 2.0 Flash for zero-shot timetable extraction |
 
 ---
 
