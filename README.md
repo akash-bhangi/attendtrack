@@ -1,12 +1,12 @@
 # 🎓 AttendTrack — Academic Attendance Management & 75% Compliance Engine
 
 [![Live Web App](https://img.shields.io/badge/Live_App-attendtrack--steel.vercel.app-2563eb?style=for-the-badge&logo=vercel&logoColor=white)](https://attendtrack-steel.vercel.app)
-[![API Server](https://img.shields.io/badge/Backend_API-Render_Cloud-000000?style=for-the-badge&logo=render&logoColor=white)](https://attendtrack-api.onrender.com)
+[![API Server](https://img.shields.io/badge/Backend_API-Render_Cloud-000000?style=for-the-badge&logo=render&logoColor=white)](https://attendtrack-zvfg.onrender.com)
 [![Database](https://img.shields.io/badge/Database-MongoDB_Atlas-47a248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 > 🚀 **Live Production Application:** [https://attendtrack-steel.vercel.app](https://attendtrack-steel.vercel.app)  
-> ⚡ **Live Backend API (Healthcheck):** [https://attendtrack-api.onrender.com/health](https://attendtrack-api.onrender.com/health)  
+> ⚡ **Live Backend API (Healthcheck):** [https://attendtrack-zvfg.onrender.com/health](https://attendtrack-zvfg.onrender.com/health)  
 > 📱 **PWA:** Installable directly on iOS, Android, and Desktop without an App Store.
 
 [![React](https://img.shields.io/badge/Frontend-React%2019-61dafb?logo=react&logoColor=black)](https://react.dev/)
@@ -49,7 +49,7 @@ AttendTrack is deployed on modern, high-availability cloud infrastructure with 1
 | Component | Platform | Production URL | Notes |
 | :--- | :--- | :--- | :--- |
 | **Frontend Web App** | **Vercel** | [https://attendtrack-steel.vercel.app](https://attendtrack-steel.vercel.app) | Global Edge CDN, automated HTTPS, PWA enabled |
-| **Backend API** | **Render** | [https://attendtrack-api.onrender.com](https://attendtrack-api.onrender.com) | Node.js Express 5 service, CORS-protected |
+| **Backend API** | **Render** | [https://attendtrack-zvfg.onrender.com](https://attendtrack-zvfg.onrender.com) | Node.js Express 5 service, CORS-protected |
 | **Cloud Database** | **MongoDB Atlas** | Cloud M0 Cluster | Automated multi-region backup & SRV resolution |
 | **AI Vision OCR** | **Google Gemini** | Google AI Studio | Gemini 1.5 / 2.0 Flash for zero-shot timetable extraction |
 
