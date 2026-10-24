@@ -18,7 +18,7 @@ const safeFormatDate = (dateVal) => {
 };
 
 export default function Settings() {
-  const { user, updateProfile, logout } = useAuth();
+  const { user, updateProfile } = useAuth();
   const notify = useNotification();
   const { isInstallable, isStandalone, showIOSPrompt, setShowIOSPrompt, triggerInstall } = usePwaInstall();
 
@@ -333,34 +333,6 @@ export default function Settings() {
               <span>✓ App Active</span>
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Account & Session Sign Out Card */}
-      <div className="card-panel" style={{ marginTop: '24px' }}>
-        <h2 className="card-panel-title">Session Management</h2>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '14px', marginTop: '12px' }}>
-          <div>
-            <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-main)' }}>
-              {user?.name || 'Student Account'}
-            </div>
-            <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-              {user?.email || 'Signed in via Google OAuth'}
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={logout}
-            className="btn-danger"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '12px', padding: '8px 14px' }}
-          >
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-              <polyline points="16 17 21 12 16 7"></polyline>
-              <line x1="21" y1="12" x2="9" y2="12"></line>
-            </svg>
-            <span>Sign Out of AttendTrack</span>
-          </button>
         </div>
       </div>
 
