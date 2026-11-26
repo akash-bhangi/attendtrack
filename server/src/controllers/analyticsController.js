@@ -247,20 +247,40 @@ MANDATORY FORMATTING: Every course listed under Section 3 MUST be a bullet item 
 const triggerTestEmail = async (req, res) => {
   try {
     const { recipientEmail } = req.body || {};
-    const result = await sendWeeklySummaryEmail(req.user._id, recipientEmail);
+    const cleanRecipient = recipientEmail ? recipientEmail.trim().toLowerCase() : '';
+
+    if (!cleanRecipient && (!req.user.email || req.user.email === 'student.demo@college.edu')) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid recipient email address to send the digest.'
+      });
+    }
+
+    const effectiveRecipient = cleanRecipient || req.user.notificationEmail || req.user.email;
+
+    // Persist as user's notification email if custom recipient provided
+    if (cleanRecipient && req.user && req.user.notificationEmail !== cleanRecipient) {
+      req.user.notificationEmail = cleanRecipient;
+      await req.user.save();
+    }
+
+    const result = await sendWeeklySummaryEmail(req.user._id, effectiveRecipient);
     if (!result) {
       return res.status(400).json({ success: false, message: 'Could not generate email for user profile' });
     }
-    const targetEmail = result.to || req.user.email;
-    let msg = `Attendance digest dispatched for ${targetEmail}`;
+    const targetEmail = result.to || effectiveRecipient;
+    let msg = `Attendance digest dispatched to ${targetEmail}!`;
     if (result && result.isReal) {
-      msg = `Real attendance email dispatched directly to ${targetEmail} via Gmail! Check your inbox (or Spam/Promotions).`;
+      msg = `Attendance digest dispatched directly to ${targetEmail} via email! Check your inbox (or Spam/Promotions).`;
     } else if (result && result.previewUrl) {
-      msg = `Test digest dispatched via Ethereal! Preview link: ${result.previewUrl}`;
+      msg = `Test digest dispatched! Preview link: ${result.previewUrl}`;
     }
     res.status(200).json({
       success: true,
-      data: result,
+      data: {
+        ...result,
+        savedNotificationEmail: req.user.notificationEmail
+      },
       message: msg
     });
   } catch (error) {

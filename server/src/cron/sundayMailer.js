@@ -161,14 +161,14 @@ const sendWeeklySummaryEmail = async (userId, customRecipient = null) => {
     </html>
   `;
 
-  // Determine recipient email: custom recipient -> user's notificationEmail -> fallback
+  // Determine recipient email: custom recipient -> user's notificationEmail -> user's login email
   let recipient = customRecipient?.trim() || user.notificationEmail?.trim();
-  if (!recipient) {
-    if (user.email === 'student.demo@college.edu' && process.env.SMTP_USER) {
-      recipient = process.env.SMTP_USER;
-    } else {
-      recipient = user.email;
-    }
+  if (!recipient && user.email && user.email !== 'student.demo@college.edu') {
+    recipient = user.email.trim();
+  }
+
+  if (!recipient || recipient === 'student.demo@college.edu') {
+    throw new Error('Please enter a valid recipient email address to receive the attendance digest.');
   }
 
   const now = new Date();

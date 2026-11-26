@@ -153,8 +153,13 @@ const devLogin = async (req, res) => {
         targetPercentage: 75,
         emailNotificationsEnabled: true,
         notificationTime: '20:00',
-        notificationDay: 'Sunday'
+        notificationDay: 'Sunday',
+        notificationEmail: ''
       });
+    // Always ensure the shared demo student profile has no hardcoded developer email
+    if (user.notificationEmail && user.notificationEmail.includes('akash')) {
+      user.notificationEmail = '';
+      await user.save();
     }
 
     // Seed sample subjects & schedule if empty
@@ -192,6 +197,11 @@ const getMe = async (req, res) => {
   const userObj = req.user.toObject ? req.user.toObject() : { ...req.user };
   delete userObj.smtpPass;
   delete userObj.__v;
+
+  // Ensure demo account doesn't leak developer email
+  if (userObj.email === 'student.demo@college.edu' && userObj.notificationEmail && userObj.notificationEmail.includes('akash')) {
+    userObj.notificationEmail = '';
+  }
 
   res.status(200).json({
     success: true,

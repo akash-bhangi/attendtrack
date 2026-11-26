@@ -19,11 +19,16 @@ export default function Analytics() {
 
   useEffect(() => {
     if (user) {
-      setTargetRecipient(
-        user.notificationEmail ||
-        user.email ||
-        ''
-      );
+      // Default to the person's email through which they logged in, or their custom notification email
+      if (user.email === 'student.demo@college.edu') {
+        setTargetRecipient(
+          user.notificationEmail && !user.notificationEmail.includes('akash')
+            ? user.notificationEmail
+            : ''
+        );
+      } else {
+        setTargetRecipient(user.notificationEmail || user.email || '');
+      }
     }
   }, [user]);
 
@@ -558,7 +563,7 @@ export default function Analytics() {
                 type="email"
                 value={targetRecipient}
                 onChange={(e) => setTargetRecipient(e.target.value)}
-                placeholder="e.g. student@college.edu"
+                placeholder={user?.email && user.email !== 'student.demo@college.edu' ? user.email : 'e.g. student@college.edu'}
                 style={{
                   width: '100%',
                   padding: '8px 12px',
@@ -570,6 +575,9 @@ export default function Analytics() {
                   boxSizing: 'border-box'
                 }}
               />
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>
+                Defaults to your logged-in email ({user?.email || 'account'}). You can type any email address to receive digests.
+              </span>
             </div>
             <div style={{ color: 'var(--text-muted)', lineHeight: '1.5' }}>
               <strong>Scheduled Slot:</strong> {formatTime12h(user?.notificationTime || '20:00')} ({user?.notificationDay || 'Sunday'})

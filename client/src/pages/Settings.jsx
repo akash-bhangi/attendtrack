@@ -28,7 +28,9 @@ export default function Settings() {
   const [notificationTime, setNotificationTime] = useState(user?.notificationTime || '20:00');
   const [notificationDay, setNotificationDay] = useState(user?.notificationDay || 'Sunday');
   const [notificationEmail, setNotificationEmail] = useState(
-    user?.notificationEmail || user?.email || ''
+    user?.email === 'student.demo@college.edu'
+      ? (user?.notificationEmail && !user?.notificationEmail.includes('akash') ? user.notificationEmail : '')
+      : (user?.notificationEmail || user?.email || '')
   );
   const [saved, setSaved] = useState(false);
   const [sendingTest, setSendingTest] = useState(false);
@@ -44,7 +46,15 @@ export default function Settings() {
       if (user.emailNotificationsEnabled !== undefined) setEmailNotificationsEnabled(user.emailNotificationsEnabled);
       if (user.notificationTime) setNotificationTime(user.notificationTime);
       if (user.notificationDay) setNotificationDay(user.notificationDay);
-      setNotificationEmail(user.notificationEmail || user.email || '');
+      if (user.email === 'student.demo@college.edu') {
+        setNotificationEmail(
+          user.notificationEmail && !user.notificationEmail.includes('akash')
+            ? user.notificationEmail
+            : ''
+        );
+      } else {
+        setNotificationEmail(user.notificationEmail || user.email || '');
+      }
     }
   }, [user]);
 
@@ -220,16 +230,21 @@ export default function Settings() {
                 </div>
 
                 <div>
-                  <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+                  <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-main)', display: 'block', marginBottom: '4px' }}>
                     Digest Recipient Email Address
                   </label>
                   <input
                     type="email"
                     value={notificationEmail}
                     onChange={(e) => setNotificationEmail(e.target.value)}
-                    placeholder="e.g. student@college.edu"
+                    placeholder={user?.email && user.email !== 'student.demo@college.edu' ? user.email : 'e.g. your-email@gmail.com'}
                     style={{ width: '100%', padding: '8px 12px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', background: 'var(--bg-surface)', color: 'var(--text-main)', fontSize: '13px', boxSizing: 'border-box' }}
                   />
+                  <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '4px', display: 'block' }}>
+                    {user?.email && user.email !== 'student.demo@college.edu'
+                      ? `Defaults to your login email (${user.email}). You can change this to any email to receive digests.`
+                      : 'Enter your personal email address where you want to receive attendance digests.'}
+                  </span>
                 </div>
 
                 <div style={{ background: 'var(--bg-surface)', border: '1px solid var(--border)', padding: '12px', borderRadius: 'var(--radius-sm)', fontSize: '12.5px', color: 'var(--text-muted)', lineHeight: '1.5' }}>
@@ -239,7 +254,9 @@ export default function Settings() {
                   </strong>{' '}
                   at{' '}
                   <strong style={{ color: 'var(--text-main)' }}>{formatTime12h(notificationTime)}</strong> to{' '}
-                  <span style={{ color: 'var(--accent)', fontWeight: 600 }}>{notificationEmail || user?.email}</span>.
+                  <span style={{ color: 'var(--accent)', fontWeight: 600 }}>
+                    {notificationEmail || (user?.email && user.email !== 'student.demo@college.edu' ? user.email : 'your specified email address above')}
+                  </span>.
                 </div>
 
                 {/* Instant Test Dispatch Trigger */}

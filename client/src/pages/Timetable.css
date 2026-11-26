@@ -78,6 +78,10 @@
   border: 2px solid var(--accent);
 }
 
+.timetable-day-chip.is-today.active {
+  box-shadow: 0 0 0 1px var(--accent), 0 3px 10px rgba(37, 99, 235, 0.25);
+}
+
 .timetable-day-chip.is-today:not(.active) {
   background: var(--accent-subtle);
 }

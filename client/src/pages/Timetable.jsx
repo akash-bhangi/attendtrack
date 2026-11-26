@@ -4,12 +4,20 @@ import { useNotification } from '../context/NotificationContext';
 import { formatTime12h } from '../utils/formatters';
 import './Timetable.css';
 
+const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+const getTodayDayName = () => {
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const today = dayNames[new Date().getDay()];
+  return DAYS_OF_WEEK.includes(today) ? today : 'Monday';
+};
+
 export default function Timetable() {
   const notify = useNotification();
   const [timetable, setTimetable] = useState({ raw: [], byDay: {} });
   const [subjects, setSubjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDay, setSelectedDay] = useState('Monday');
+  const [selectedDay, setSelectedDay] = useState(getTodayDayName);
 
   // Modals
   const [showSlotModal, setShowSlotModal] = useState(false);
@@ -21,7 +29,7 @@ export default function Timetable() {
   // New slot form
   const [slotForm, setSlotForm] = useState({
     subjectId: '',
-    dayOfWeek: 'Monday',
+    dayOfWeek: getTodayDayName(),
     startTime: '09:00',
     endTime: '10:00',
     room: ''
@@ -230,7 +238,13 @@ export default function Timetable() {
             <button className="btn-secondary" onClick={() => setShowScanModal(true)}>
               📷 Scan AI
             </button>
-            <button className="btn-primary" onClick={() => setShowSlotModal(true)}>
+            <button
+              className="btn-primary"
+              onClick={() => {
+                setSlotForm((prev) => ({ ...prev, dayOfWeek: selectedDay }));
+                setShowSlotModal(true);
+              }}
+            >
               + Add Slot
             </button>
           </div>

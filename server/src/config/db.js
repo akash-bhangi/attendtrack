@@ -9,12 +9,28 @@ try {
 }
 
 const connectDB = async () => {
+  const primaryUri = process.env.MONGODB_URI;
+  const localUri = 'mongodb://127.0.0.1:27017/attendtrack';
+
+  if (primaryUri) {
+    try {
+      await mongoose.connect(primaryUri, {
+        serverSelectionTimeoutMS: 4000
+      });
+      console.log('[MongoDB] Connected to primary MongoDB cluster successfully');
+      return;
+    } catch (error) {
+      console.warn(`[MongoDB Primary] Connection failed (${error.message}). Attempting fallback to local MongoDB...`);
+    }
+  }
+
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/attendtrack');
-    console.log('[MongoDB] Connected successfully');
-  } catch (error) {
-    console.error(`[MongoDB] Connection error: ${error.message}`);
-    // Fallback or warning instead of crashing, allowing app to run even if local mongo is starting
+    await mongoose.connect(localUri, {
+      serverSelectionTimeoutMS: 4000
+    });
+    console.log('[MongoDB] Connected to local MongoDB fallback successfully');
+  } catch (localErr) {
+    console.error(`[MongoDB] Local connection also failed: ${localErr.message}`);
   }
 };
 
